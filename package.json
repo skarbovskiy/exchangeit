@@ -23,6 +23,8 @@
     "generic-pool": "^2.2.0",
     "lodash": "^3.6.0",
     "morgan": "^1.5.2",
+    "pg": "^4.3.0",
+    "pg-native": "^1.8.0",
     "winston": "^1.0.0"
   }
 }

@@ -16,7 +16,6 @@
         "return",
         "try",
         "catch",
-        "typeof",
         "function"
     ],
     "requireBlocksOnNewline": true,

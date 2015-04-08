@@ -3,7 +3,17 @@ var async = require('async');
 
 var config = require('../../config/' + (process.env.NODE_ENV || 'development'));
 var bootstrappedData = null;
-var initTasks = {};
+var initTasks = {
+    pg: function (callback) {
+        var pgHandler = require('./pgHandler');
+        pgHandler(config.pg, function (client, done) {
+            done();
+            callback(null, function (callback) {
+                pgHandler(config.pg, callback);
+            })
+        });
+    }
+};
 
 module.exports = {
     init: function (preBootstrappedData, callback) {
