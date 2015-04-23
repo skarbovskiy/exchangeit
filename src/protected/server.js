@@ -5,6 +5,7 @@ var winston = require('winston');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var bootstrapper = require('./modules/core/bootstrap');
 
 var logger = new (winston.Logger)({
     transports: [
@@ -21,7 +22,10 @@ var logger = new (winston.Logger)({
 });
 logger.info('starting application bootstrap');
 
-require('./modules/core/bootstrap').init({logger: logger}, function (error) {
+bootstrapper.init({logger: logger}, function (error) {
+    var requestHandler = require('./modules/core/requestHandler');//these must be required after init
+    var sessionHandler = require('./modules/core/sessionHandler');
+
     if (error) {
         return logger.error('error while bootstrapping application', {message: error.message, stack: error.stack});
     }
@@ -43,6 +47,22 @@ require('./modules/core/bootstrap').init({logger: logger}, function (error) {
 
     app.use(express.static(path.join(__dirname, '..', 'public')));
     app.use(bodyParser.json());
+    app.use(function (req, resp, next) {
+        var pg = bootstrapper.get('pg');
+        pg(function (client, done) {
+            client.setQuery('SELECT 1', [], function (error, response) {
+                console.log(response.rows);
+                done();
+                next();
+            });
+        });
+    });
+    app.use(sessionHandler);
+
+    app.use('/:section/:service/:function', function (request, response, next) {
+        request._startTime = +new Date();
+        requestHandler(request, response, next);
+    });
 
     app.use(function (error, request, response, next) {
         if (error.status && error.json) {
@@ -53,7 +73,7 @@ require('./modules/core/bootstrap').init({logger: logger}, function (error) {
             return response.status(error.status).json(error.json);
         } else if (error.status) {
             logger.warn('application warning', {message: error.message, stack: error.stack, status: error.status});
-            return response.status(error.status).json({error: 'internal error'});
+            return response.status(error.status).json({error: error.message});
         } else {
             logger.error('application error', {message: error.message, stack: error.stack});
             response.status(500).send({error: 'internal error'});
