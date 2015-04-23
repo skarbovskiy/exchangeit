@@ -3,10 +3,7 @@
 var lodash = require('lodash');
 var logger = require('./bootstrap').get('logger');
 
-function _handleResponse (requestObject, responseObject, responseCode, responseData, flags, next) {
-    if (responseData instanceof Error) {
-        return next(responseData);
-    }
+function _handleResponse (requestObject, responseObject, responseCode, responseData, flags) {
     if (flags.isRedirect) {
         responseObject.redirect(responseData);
     } else {
@@ -19,6 +16,7 @@ function _handleResponse (requestObject, responseObject, responseCode, responseD
         requestIps: lodash.union(requestObject.ips, [requestObject.ip]),
         requestPath: requestObject.path,
         requestBody: JSON.stringify(requestObject.body),
+        requestHeaders: JSON.stringify(requestObject.headers),
         responseCode: responseCode,
         responseObject: JSON.stringify(responseData),
         responseDuration: endTime - startTime
@@ -36,8 +34,11 @@ module.exports = function (request, response, next) {
         error.status = 404;
         throw error;
     }
-    var responseCallback = function (responseData, isRedirect) {
-        _handleResponse(request, response, 200, responseData, {isRedirect: isRedirect}, next);
+    var responseCallback = function (error, responseData, isRedirect) {
+        if (error) {
+            return next(error);
+        }
+        _handleResponse(request, response, 200, responseData, {isRedirect: isRedirect});
     };
     service[functionName](request, responseCallback, next);
 };

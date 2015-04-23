@@ -47,19 +47,9 @@ bootstrapper.init({logger: logger}, function (error) {
 
     app.use(express.static(path.join(__dirname, '..', 'public')));
     app.use(bodyParser.json());
-    app.use(function (req, resp, next) {
-        var pg = bootstrapper.get('pg');
-        pg(function (client, done) {
-            client.setQuery('SELECT 1', [], function (error, response) {
-                console.log(response.rows);
-                done();
-                next();
-            });
-        });
-    });
-    app.use(sessionHandler);
+    app.use(sessionHandler.checker);
 
-    app.use('/:section/:service/:function', function (request, response, next) {
+    app.post('/:section/:service/:function', function (request, response, next) {
         request._startTime = +new Date();
         requestHandler(request, response, next);
     });
