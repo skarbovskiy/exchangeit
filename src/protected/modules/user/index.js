@@ -48,7 +48,7 @@ var User = {
                         return callback(error);
                     }
                     if (data.rows.length === 0) {
-                        var error = new Error('no user found');
+                        error = new Error('no user found');
                         error.status = 400;
                         return callback(error);
                     }
@@ -66,6 +66,6 @@ var helper = {
         md5sum.update(string);
         return md5sum.digest('hex');
     }
-}
+};
 
 module.exports = User;
