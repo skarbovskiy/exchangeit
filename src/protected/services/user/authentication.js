@@ -15,6 +15,11 @@ var Service = {
 
         });
     },
+
+    check_token: function (request, response) {
+        request.session.set = undefined;
+        response(null, request.session);
+    },
     /**
      * authenticate user via given login and password and store data in session
      * @param request
@@ -36,18 +41,19 @@ var Service = {
         });
     },
 
-    test: function (request, response) {
-        response(null, request.session);
-    },
-
     register: function (request, response) {
         if (request.session.user && request.session.user.id) {
             var error = new Error('already authenticated');
             error.status = 409;
             return response(error);
         }
-        userModel.register(request.body.phone, request.body.password, function (error) {
-            response(error);
+        userModel.register(request.body.phone, request.body.password, function (error, user) {
+            if (error) {
+                return response(error);
+            }
+            request.session.set({user: user}, function (error) {
+                response(error);
+            })
         });
     }
 };

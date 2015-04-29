@@ -1,0 +1,10 @@
+====ERRORS====
+client storage not available
+already authenticated
+no auth data found
+no auth-token provided
+service not found
+user with this phone already exists
+bad phone or password passed
+no user authenticated
+internal error

@@ -8,9 +8,13 @@ define([
         '$http',
         '$q',
         '$rootScope',
-        '$timeout',
+        '$window',
         '$location',
-        function ($http, $q, $rootScope, $timeout, $location) {
+        function ($http, $q, $rootScope, $window, $location) {
+
+            if (!$window.localStorage) {
+                $rootScope.$emit('error', new Error('client storage not available'));
+            }
 
             var HTTP = {
                 baseURL: '/',
@@ -44,12 +48,26 @@ define([
                 var defer = $q.defer();
 
                 return (function () {
-                    $http.post(getServiceUrl() + url, data)
-                        .success(function (response, status, headers) {
+                    var token = $window.localStorage.getItem('session') || undefined;
+                    data = data || {};
+                    var request = {
+                        method: 'POST',
+                        url: url,
+                        headers: {
+                            'auth-token': token
+                        },
+                        data: data
+                    };
+                    $http(request)
+                        .success(function (response) {
                             defer.resolve(response);
                         })
-                        .error(function (response) {
-                            defer.reject(response);
+                        .error(function (response, status) {
+                            var newResponse = {
+                                message: response,
+                                status: status
+                            };
+                            defer.reject(newResponse);
                         });
 
                     return defer.promise;

@@ -22,7 +22,7 @@ var User = {
         pg(function (client, done) {
             client.setQuery(
                 'INSERT INTO users.users (phone, password, status, type) ' +
-                'VALUES ($1, $2, $3, $4)',
+                'VALUES ($1, $2, $3, $4) RETURNING *',
                 [phone, helper.md5(password + salt), 'active', 'normal'],
                 function (error) {
                     done();
