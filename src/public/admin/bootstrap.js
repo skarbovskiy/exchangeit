@@ -1,6 +1,8 @@
 requirejs([
     'angular',
     'jquery',
+    'angularAnimate',
+    'angularToaster',
     'angularRoute',
     'angularUIBootstrap',
     'lodash',

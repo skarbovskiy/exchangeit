@@ -18,6 +18,7 @@ define([
                 return Http.post('/user/authentication/get_token')
                     .then(function (response) {
                         $window.localStorage.setItem('session', response.token);
+                        return response;
                     });
             }
 

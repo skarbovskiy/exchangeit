@@ -2,7 +2,9 @@ require.config({
     deps: ['bootstrap'],
     paths: {
         'jquery': '../lib/jquery/dist/jquery.min',
-        'angular': '../lib/angular/angular',
+        'angular': '../lib/angular/angular.min',
+        'angularAnimate': '../lib/angular-animate/angular-animate.min',
+        'angularToaster': '../lib/angularjs-toaster/toaster.min',
         'angularRoute': '../lib/angular-route/angular-route.min',
         'angularUIBootstrap': '../lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.12.1.min',
         'lodash': '../lib/lodash/index'
@@ -18,6 +20,12 @@ require.config({
             'exports' : 'angular'
         },
         'angularRoute': {
+            deps: ['angular']
+        },
+        'angularAnimate': {
+            deps: ['angular']
+        },
+        'angularToaster': {
             deps: ['angular']
         },
         'angularUIBootstrap': {

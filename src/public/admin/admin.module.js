@@ -2,17 +2,26 @@
 define([
     'angular'
 ], function (angular) {
-    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'core', 'user'])
+    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toaster', 'core', 'user'])
         .config(['$routeProvider', function ($routeProvider) {
+
+            function getUser ($rootScope, User) {
+                return User.getUser('admin').then(function (response) {
+                    $rootScope.Base.user = response;
+                    return response;
+                })
+            }
+
             $routeProvider
                 .when('/', {
                     controller: 'Dashboard',
                     templateUrl: '/admin/views/controllers/dashboard/index.html',
                     resolve: {
                         user: [
+                            '$rootScope',
                             'User',
-                            function (User) {
-                                return User.getUser('admin');
+                            function ($rootScope, User) {
+                                return getUser($rootScope, User);
                             }
                         ]
                     }
