@@ -2,6 +2,7 @@
 
 var sessionHandler = require('../../modules/core/sessionHandler');
 var userModel = require('../../modules/user/index');
+var helper = require('../../modules/user/helper');
 
 var Service = {
     /**
@@ -17,7 +18,9 @@ var Service = {
     },
 
     check_token: function (request, response) {
-        request.session.set = undefined;
+        var session = request.session;
+        session.set = undefined;
+        session.user = helper.cleanDataForResponse(session.user);
         response(null, request.session);
     },
     /**
@@ -41,6 +44,17 @@ var Service = {
         });
     },
 
+    logout: function (request, response) {
+        if (!request.session.user || !request.session.user.id) {
+            var error = new Error('no user authenticated');
+            error.status = 409;
+            return response(error);
+        }
+        request.session.set({user: null}, function (error) {
+            response(error);
+        });
+    },
+
     register: function (request, response) {
         if (request.session.user && request.session.user.id) {
             var error = new Error('already authenticated');
@@ -53,7 +67,7 @@ var Service = {
             }
             request.session.set({user: user}, function (error) {
                 response(error);
-            })
+            });
         });
     }
 };

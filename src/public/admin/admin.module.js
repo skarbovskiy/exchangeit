@@ -12,7 +12,7 @@ define([
                         user: [
                             'User',
                             function (User) {
-                                return User.getUser();
+                                return User.getUser('admin');
                             }
                         ]
                     }
@@ -28,6 +28,10 @@ define([
                             }
                         ]
                     }
+                })
+                .when('/logout', {
+                    controller: 'Logout',
+                    templateUrl: '/admin/views/controllers/login/index.html'
                 })
         }]);
 

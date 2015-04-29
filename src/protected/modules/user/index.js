@@ -1,6 +1,6 @@
 'use strict';
 var pg = require('../core/bootstrap').get('pg');
-var crypto = require('crypto');
+var helper = require('./helper');
 
 var salt = 'wef*(&hfwjekfh*0flm';
 /*
@@ -56,15 +56,6 @@ var User = {
                 }
             )
         });
-    }
-};
-
-
-var helper = {
-    md5: function (string) {
-        var md5sum = crypto.createHash('md5');
-        md5sum.update(string);
-        return md5sum.digest('hex');
     }
 };
 

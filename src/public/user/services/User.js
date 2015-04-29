@@ -7,7 +7,8 @@ define([
     user.factory('User', [
         'Http',
         '$window',
-        function (Http, $window) {
+        '$q',
+        function (Http, $window, $q) {
 
             function _checkToken () {
                 return Http.post('/user/authentication/check_token');
@@ -36,13 +37,31 @@ define([
                     }
                 },
                 login: function (phone, password) {
-                    return Http.post('/user/authentication/register', {phone: phone, password: password});
+                    return Http.post('/user/authentication/login', {phone: phone, password: password});
+                },
+                logout: function () {
+                    return Http.post('/user/authentication/logout');
                 },
                 register: function (phone, password) {
                     return Http.post('/user/authentication/register', {phone: phone, password: password});
                 },
-                getUser: function () {
-                    return Http.post('/user/info/get');
+                getUser: function (checkType) {
+                    var promise = Http.post('/user/info/get');
+                    if (!checkType) {
+                        return promise;
+                    }
+                    var defer = $q.defer();
+                    promise.then(function (response) {
+                        if (response.type === checkType) {
+                            return defer.resolve(response);
+                        } else {
+                            $window.localStorage.setItem('session', '');
+                            return defer.reject(new Error('user don\'t have permission to access'));
+                        }
+                    }, function (reason) {
+                        defer.reject(reason);
+                    });
+                    return defer.promise;
                 }
             };
             return Service;

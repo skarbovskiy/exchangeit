@@ -8,3 +8,5 @@ user with this phone already exists
 bad phone or password passed
 no user authenticated
 internal error
+bad phone or password passed
+user don't have permission to access

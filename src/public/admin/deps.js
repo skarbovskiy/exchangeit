@@ -9,5 +9,6 @@ define([
 
     './controllers/Base',
     './controllers/Login',
+    './controllers/Logout',
     './controllers/Dashboard'
 ], function () {});

@@ -1,5 +1,5 @@
 'use strict';
-
+var helper = require('../../modules/user/helper');
 var Service = {
     get: function (request, response) {
         if (!request.session.user || !request.session.user.id) {
@@ -7,9 +7,7 @@ var Service = {
             error.status = 401;
             return response(error);
         }
-        var sessionData = request.session.user;
-        sessionData.password = null;
-        response(null, sessionData);
+        response(null, helper.cleanDataForResponse(request.session.user));
     }
 };
 
