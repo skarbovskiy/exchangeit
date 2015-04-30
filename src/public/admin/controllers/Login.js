@@ -3,7 +3,7 @@ define([
 ], function (admin) {
     'use strict';
 
-    admin.controller('Login', ['$scope', '$location', 'User', 'token', function ($scope, $location, User, token) {
+    admin.controller('Login', ['$scope', '$location', 'toastr', 'User', 'token', function ($scope, $location, toastr, User, token) {
 
         if (token && token.user && token.user.phone) {
             return $location.path('/');
@@ -25,6 +25,7 @@ define([
                 $scope.Core.loading = true;
                 User.login('+' + this.phone, this.password)
                     .then(function () {
+                        toastr.success('прошла успешно.', 'Авторизация');
                         $scope.Login.alerts = [{type: 'success', msg: 'Авторизация прошла успешно!'}];
                         $scope.Base.authenticated = true;
                         $location.path('/');

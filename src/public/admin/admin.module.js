@@ -2,7 +2,7 @@
 define([
     'angular'
 ], function (angular) {
-    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toaster', 'core', 'user'])
+    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toastr', 'core', 'user'])
         .config(['$routeProvider', function ($routeProvider) {
 
             function getUser ($rootScope, User) {
