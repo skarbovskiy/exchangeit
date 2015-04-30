@@ -2,7 +2,7 @@
 define([
     'angular'
 ], function (angular) {
-    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toastr', 'core', 'user'])
+    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toastr', 'core', 'user', 'catalog'])
         .config(['$routeProvider', function ($routeProvider) {
 
             function getUser ($rootScope, User) {
@@ -41,6 +41,38 @@ define([
                 .when('/logout', {
                     controller: 'Logout',
                     templateUrl: '/admin/views/controllers/login/index.html'
+                })
+                .when('/categories/:parent_id', {
+                    controller: 'Categories',
+                    templateUrl: '/admin/views/controllers/categories/index.html',
+                    resolve: {
+                        user: [
+                            '$rootScope',
+                            'User',
+                            function ($rootScope, User) {
+                                return getUser($rootScope, User);
+                            }
+                        ],
+                        categories: [
+                            '$route',
+                            'Catalog',
+                            function ($route, Catalog) {
+                                return Catalog.getCategories($route.current.params.parent_id);
+                            }
+                        ],
+                        parent: [
+                            '$route',
+                            'Catalog',
+                            function ($route, Catalog) {
+                                var id = $route.current.params.parent_id
+                                if (id && id !== 'null') {
+                                    return Catalog.getCategory($route.current.params.parent_id);
+                                } else {
+                                    return null;
+                                }
+                            }
+                        ]
+                    }
                 })
         }]);
 

@@ -26,7 +26,7 @@ define([
                         $scope.Login.alerts.splice(index, 1);
                     },
                     authenticate: function () {
-                        if (!$scope.Login.phone || !$scope.Login.password) {
+                        if (!$scope.loginForm.$valid) {
                             return;
                         }
                         $scope.Core.loading = true;

@@ -5,7 +5,9 @@ no auth data found
 no auth-token provided
 service not found
 user with this phone already exists
+category with this name already exists
 bad phone or password passed
+bad data passed
 no user authenticated
 internal error
 bad phone or password passed

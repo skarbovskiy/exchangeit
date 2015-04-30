@@ -1,0 +1,33 @@
+<h3 class="page-header">
+    <button class="btn btn-default pull-right btn-info" ng-click="Categories.create()" style="margin: 5px 5px 0 0">Добавить категорию</button>
+    <ol class="breadcrumb">
+        <li><a href="admin.html#/categories/null">Категории</a></li>
+        <li>{{Categories.parent.name}}</li>
+    </ol>
+</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Минимальная стоимость товара</th>
+            <th>Максимальная стоимость товара</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in Categories.list">
+                <td>{{item.id}}</td>
+                <td><a href="admin.html#/categories/{{item.id}}">{{item.name}}</a></td>
+                <td>{{item.min_price}}</td>
+                <td>{{item.max_price}}</td>
+                <td style="width: 20em">
+                    <button type="button" class="btn btn-primary">Редактировать</button>
+                    <button type="button" class="btn btn-danger">Удалить</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="well" ng-if="Categories.list.length === 0">Категории не найдены</div>

@@ -17,7 +17,26 @@ define([
 
         var Base = {
             authenticated: true,
-            user: null
+            user: null,
+            menu: {
+                dashboard: {
+                    link: 'admin.html#/',
+                    title: 'Dashboard'
+                },
+                categories: {
+                    link: 'admin.html#/categories/null',
+                    title: 'Категории'
+                }
+            },
+            setActiveMenu: function (item) {
+                _.keys(Base.menu).forEach(function (key) {
+                    if (key === item) {
+                        Base.menu[key].active = true;
+                    } else {
+                        Base.menu[key].active = false;
+                    }
+                });
+            }
         };
 
         $rootScope.Base = Base;

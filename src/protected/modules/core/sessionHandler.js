@@ -6,6 +6,16 @@ var redis = require('./bootstrap').get('redis');
 
 var keyLifeTime = 15 * 60; //15 minutes
 
+var accessMatrix = {
+    '/user/authentication/get_token': 'noToken',
+    '/user/authentication/login': 'notAuthenticated',
+    '/user/authentication/register': 'notAuthenticated',
+    '/user/authentication/logout': 'authenticated',
+    '/user/info/get': 'authenticated',
+    '/catalog/categories/create': 'admin',
+    '/catalog/categories/remove': 'admin'
+};
+
 var Store = {
     checker: {
         process: function (token, ip, callback) {
@@ -62,8 +72,9 @@ var Store = {
 
 module.exports = {
     checker: function (request, response, next) {
+        var path = request.path;
         var token = request.header('auth-token');
-        if (!token && request.path === '/user/authentication/get_token') {
+        if (!token && accessMatrix[path] === 'noToken') {
             return next();
         }
         if (!token) {
@@ -71,14 +82,36 @@ module.exports = {
             error.status = 403;
             return next(error);
         }
-        Store.checker.process(token, request.ip, function (error, data) {
-            if (error) {
-                if (error.message === 'no auth data found') {
-                    error.status = 403;
+        Store.checker.process(token, request.ip, function (storeError, data) {
+            if (storeError) {
+                if (storeError.message === 'no auth data found') {
+                    storeError.status = 403;
                 }
-                return next(error);
+                return next(storeError);
             }
             var session = data;
+            var error = null;
+            if (accessMatrix[path] === 'authenticated' && (!session.user || !session.user.id)) {
+                error = new Error('no user authenticated');
+                error.status = 401;
+                return next(error);
+            }
+
+            if (accessMatrix[path] === 'admin' &&
+                (
+                    (!session.user || !session.user.id) || session.user.type !== 'admin'
+                )
+            ) {
+                error = new Error('user don\'t have permission to access');
+                error.status = 401;
+                return next(error);
+            }
+
+            if (accessMatrix[path] === 'notAuthenticated' && session.user && session.user.id) {
+                error = new Error('already authenticated');
+                error.status = 409;
+                return next(error);
+            }
 
             session.set = function (newData, callback) {
                 return (function () {

@@ -10,10 +10,6 @@ define([
         '$q',
         function (Http, $window, $q) {
 
-            function _checkToken () {
-                return Http.post('/user/authentication/check_token');
-            };
-
             function _retrieveToken () {
                 return Http.post('/user/authentication/get_token')
                     .then(function (response) {
@@ -26,7 +22,7 @@ define([
                 getToken: function () {
                     var existingToken = $window.localStorage.getItem('session') || undefined;
                     if (existingToken) {
-                        return _checkToken()
+                        return Http.post('/user/authentication/check_token')
                             .then(function (response) {
                                 return response;
                             }, function () {
@@ -51,18 +47,16 @@ define([
                     if (!checkType) {
                         return promise;
                     }
-                    var defer = $q.defer();
-                    promise.then(function (response) {
+                    return promise.then(function (response) {
                         if (response.type === checkType) {
-                            return defer.resolve(response);
+                            return response;
                         } else {
                             $window.localStorage.setItem('session', '');
-                            return defer.reject(new Error('user don\'t have permission to access'));
+                            return $q.reject(new Error('user don\'t have permission to access'));
                         }
                     }, function (reason) {
-                        defer.reject(reason);
+                        return $q.reject(reason);
                     });
-                    return defer.promise;
                 }
             };
             return Service;
