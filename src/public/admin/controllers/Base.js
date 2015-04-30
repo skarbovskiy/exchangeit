@@ -3,7 +3,7 @@ define([
 ], function (admin) {
     'use strict';
 
-    admin.controller('Base', ['$rootScope', '$location', function ($rootScope, $location) {
+    admin.controller('Base', ['$rootScope', '$location', 'toastr', function ($rootScope, $location, toastr) {
         $rootScope.$on('$routeChangeError', function (event, current, previous, rejection) {
             if (
                 (rejection.status && (rejection.status === 401 || rejection.status === 403)) ||
@@ -12,6 +12,7 @@ define([
                 $rootScope.Base.authenticated = false;
                 $location.path('/login');
             }
+            toastr.error(rejection.message, 'Ошибка');
         });
 
         var Base = {
