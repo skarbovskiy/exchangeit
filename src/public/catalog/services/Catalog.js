@@ -7,7 +7,7 @@ define([
     catalog.factory('Catalog', [
         'Http',
         function (Http) {
-            var Service = {
+            return {
                 getCategories: function (parentId) {
                     return Http.post('/catalog/categories/getList', {parent_id: parentId});
                 },
@@ -21,9 +21,11 @@ define([
                         min_price: minPrice,
                         max_price: maxPrice
                     });
+                },
+                removeCategory: function (id) {
+                    return Http.post('/catalog/categories/remove', {id: id});
                 }
-            };
-            return Service;
+            }
         }
     ]);
 });

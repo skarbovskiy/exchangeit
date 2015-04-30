@@ -1,5 +1,6 @@
 'use strict';
 var pg = require('../core/bootstrap').get('pg');
+var async = require('async');
 var Service = {
     getList: function (parentId, callback) {
         pg(function (client, done) {
@@ -68,13 +69,32 @@ var Service = {
             error.status = 422;
             return callback(error);
         }
+        /*@todo add transactions*/
         pg(function (client, done) {
             client.setQuery(
-                'DELETE FROM catalog.categories WHERE id = $1 LIMIT 1',
+                'SELECT id FROM catalog.categories WHERE parent_id = $1 OR id = $1',
                 [id],
-                function (error) {
+                function (error, response) {
                     done();
-                    callback(error);
+                    if (error) {
+                        callback(error);
+                    }
+                    var ids = [];
+                    response.rows.forEach(function (row) {
+                        ids.push(row.id);
+                    });
+                    async.eachLimit(ids, 4, function (id, callback) {
+                        pg(function (client, done) {
+                            client.setQuery(
+                                'DELETE FROM catalog.categories WHERE id = $1',
+                                [id],
+                                function (error) {
+                                    done();
+                                    callback(error);
+                                }
+                            );
+                        });
+                    }, callback);
                 }
             );
         });

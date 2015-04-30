@@ -16,5 +16,5 @@ define([
     './controllers/Dashboard',
     './controllers/Categories',
 
-    './controllers/modals/CreateModal'
+    './controllers/modals/DefaultModal'
 ], function () {});
