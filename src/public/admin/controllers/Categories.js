@@ -12,8 +12,8 @@ define([
             'toastr',
             'Catalog',
             'categories',
-            'parent',
-            function ($scope, $route, $modal, toastr, Catalog, categories, parent) {
+            'path',
+            function ($scope, $route, $modal, toastr, Catalog, categories, path) {
                 $scope.Base.setActiveMenu('categories');
 
                 function updateList (promise) {
@@ -30,23 +30,48 @@ define([
                 }
                 var Categories = {
                     list: categories,
-                    parent: parent,
+                    path: path,
+                    prices: {},
                     create: function () {
                         var modalInstance = $modal.open({
                             templateUrl: '/admin/views/modals/create.html',
                             controller: 'DefaultModal',
-                            size: '',
+                            size: 'lg',
                             resolve: {
                                 item: function () {
                                     var obj = {
                                         title: 'Создание категории',
-                                        fields: {
-                                            name: {
+                                        fields: [
+                                            {
+                                                name: 'name',
                                                 title: 'Название',
+                                                type: 'text',
                                                 placeholder: 'Тапки',
                                                 required: true
+                                            },
+                                            {
+                                                name: 'active',
+                                                title: 'Активна',
+                                                type: 'checkbox'
+                                            },
+                                            {
+                                                name: 'can_have_products',
+                                                title: 'Может содержать товары',
+                                                type: 'checkbox'
+                                            },
+                                            {
+                                                name: 'min_price',
+                                                title: 'Минимальная цена товара',
+                                                type: 'number',
+                                                depends: 'can_have_products'
+                                            },
+                                            {
+                                                name: 'max_price',
+                                                title: 'Максимальная цена товара',
+                                                type: 'number',
+                                                depends: 'can_have_products'
                                             }
-                                        }
+                                        ]
                                     };
                                     if ($scope.Categories.parent) {
                                         obj.title = 'Создание подкатегории (' + $scope.Categories.parent.name + ')';
@@ -61,7 +86,12 @@ define([
                             updateList(
                                 Catalog.createCategory(
                                     item.fields.name.value,
-                                    $scope.Categories.parent ? $scope.Categories.parent.id : null
+                                    item.fields.active.value,
+                                    $scope.Categories.path ?
+                                        $scope.Categories.path[$scope.Categories.path.length - 1].id : null,
+                                    item.fields.can_have_products.value,
+                                    item.fields.min_price.value,
+                                    item.fields.max_price.value
                                 )
                             );
                         });
@@ -89,6 +119,13 @@ define([
                         });
                     }
                 };
+
+                Categories.list.forEach(function (category) {
+                    Catalog.getPrices(category.id)
+                        .then(function (prices) {
+                            $scope.Categories.prices[category.id] = prices;
+                        });
+                });
 
                 $scope.Categories = Categories;
             }

@@ -1,6 +1,7 @@
 'use strict';
-var pg = require('../core/bootstrap').get('pg');
 var async = require('async');
+var lodash = require('lodash');
+var pg = require('../core/bootstrap').get('pg');
 var Service = {
     getList: function (parentId, callback) {
         pg(function (client, done) {
@@ -28,39 +29,94 @@ var Service = {
         });
     },
 
-    create: function (name, parentId, minPrice, maxPrice, callback) {
+    getPath: function (id, callback) {
+        Service.getOne(id, function (error, category) {
+            var path = category.path.slice(1, -1).split('/');
+            var extendedPath = [{
+                name: category.name,
+                id: category.id
+            }];
+            if (!path || path[0] === '') {
+                return callback(null, extendedPath);
+            }
+            async.map(path, Service.getOne, function (error, categories) {
+                if (error) {
+                    return callback(error);
+                }
+                categories.forEach(function (category) {
+                    extendedPath.push({
+                        name: category.name,
+                        id: category.id
+                    });
+                });
+                extendedPath = lodash.sortBy(extendedPath, function (item) {
+                    return item.id
+                });
+                callback(null, extendedPath);
+            });
+        });
+    },
+
+    getCategoryPrices: function (id, callback) {
+        pg(function (client, done) {
+            client.setQuery(
+                'SELECT MIN(min_price) AS min, MAX(max_price) AS max FROM catalog.categories ' +
+                'WHERE id = $1 OR path SIMILAR TO $2',
+                [id, '%/' + id + '/%'],
+                function (error, response) {
+                    done();
+                    callback(error, response && response.rows ? response.rows[0] : null);
+                }
+            );
+        });
+    },
+
+    create: function (name, active, parentId, canHaveProducts, minPrice, maxPrice, callback) {
         if (!name) {
             var error = new Error('bad data passed');
             error.status = 422;
             return callback(error);
         }
+        active = active || false;
         parentId = parentId || null;
+        canHaveProducts = canHaveProducts || false;
         minPrice = parseInt(minPrice) || null;
         maxPrice = parseInt(maxPrice) || null;
-        pg(function (client, done) {
-            client.setQuery(
-                'INSERT INTO catalog.categories (name, parent_id, min_price, max_price) ' +
-                'VALUES ($1, $2, $3, $4)',
-                [name, parentId, minPrice, maxPrice],
-                function (error) {
-                    if (error && /duplicate/.test(error.message)) {
-                        error = new Error('category with this name already exists');
-                        error.status = 422;
-                    }
-                    if (error || !parentId) {
-                        done();
-                        return callback(error);
-                    }
+        async.waterfall([
+            function (callback) {
+                if (!parentId) {
+                    return callback(null, null);
+                }
+                Service.getPath(parentId, function (error, path) {
+                    var stringedPath = [];
+                    path && path.forEach(function (item) {
+                        stringedPath.push(item.id);
+                    });
+                    stringedPath = stringedPath.join('/');
+                    callback(error, stringedPath);
+                })
+            },
+            function (path, callback) {
+                path = path || '';
+                pg(function (client, done) {
                     client.setQuery(
-                        'UPDATE catalog.categories SET has_children = TRUE WHERE id = $1',
-                        [parentId],
+                        'INSERT INTO catalog.categories ' +
+                            '(name, active, parent_id, path, can_have_products, min_price, max_price) ' +
+                        'VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                        [name, active, parentId, '/' + path + '/', canHaveProducts, minPrice, maxPrice],
                         function (error) {
-                            callback(error);
+                            done();
+                            if (error && /duplicate/.test(error.message)) {
+                                error = new Error('category with this name already exists');
+                                error.status = 422;
+                            }
+                            return callback(error);
+
                         }
                     )
-                }
-            )
-        });
+                });
+            }
+        ], callback);
     },
 
     remove: function (id, callback) {
@@ -72,29 +128,11 @@ var Service = {
         /*@todo add transactions*/
         pg(function (client, done) {
             client.setQuery(
-                'SELECT id FROM catalog.categories WHERE parent_id = $1 OR id = $1',
-                [id],
-                function (error, response) {
+                'DELETE FROM catalog.categories WHERE id = $1 OR path SIMILAR TO $2',
+                [id, '%/' + id + '/%'],
+                function (error) {
                     done();
-                    if (error) {
-                        callback(error);
-                    }
-                    var ids = [];
-                    response.rows.forEach(function (row) {
-                        ids.push(row.id);
-                    });
-                    async.eachLimit(ids, 4, function (id, callback) {
-                        pg(function (client, done) {
-                            client.setQuery(
-                                'DELETE FROM catalog.categories WHERE id = $1',
-                                [id],
-                                function (error) {
-                                    done();
-                                    callback(error);
-                                }
-                            );
-                        });
-                    }, callback);
+                    callback(error);
                 }
             );
         });

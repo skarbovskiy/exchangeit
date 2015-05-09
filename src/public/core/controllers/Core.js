@@ -20,9 +20,9 @@ define([
             console.log(rejection);
         });
 
-        $rootScope.$on('error', function (event, error) {
-            alert('Fatal:' + error.message);
-        });
+        //$rootScope.$on('error', function (event, error) {
+        //    alert('Fatal:' + error.message);
+        //});
 
         $rootScope.Core = Core;
     }]);

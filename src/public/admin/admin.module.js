@@ -60,13 +60,13 @@ define([
                                 return Catalog.getCategories($route.current.params.parent_id);
                             }
                         ],
-                        parent: [
+                        path: [
                             '$route',
                             'Catalog',
                             function ($route, Catalog) {
-                                var id = $route.current.params.parent_id
+                                var id = $route.current.params.parent_id;
                                 if (id && id !== 'null') {
-                                    return Catalog.getCategory($route.current.params.parent_id);
+                                    return Catalog.getCategoryPath(id);
                                 } else {
                                     return null;
                                 }
