@@ -34,7 +34,7 @@ var Service = {
         if (minPrice && maxPrice && minPrice > maxPrice) {
             var error = new Error('min price can\'t be bigger than max price');
             error.status = 422;
-            return callback(error);
+            return response(error);
         }
         categoriesModel.create(
             request.body.name,
