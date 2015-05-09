@@ -26,6 +26,10 @@ define([
                 categories: {
                     link: 'admin.html#/categories/null',
                     title: 'Категории'
+                },
+                users: {
+                    link: 'admin.html#/users',
+                    title: 'Пользователи'
                 }
             },
             setActiveMenu: function (item) {

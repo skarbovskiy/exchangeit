@@ -12,7 +12,9 @@ var accessMatrix = {
     '/user/authentication/login': 'notAuthenticated',
     '/user/authentication/register': 'notAuthenticated',
     '/user/authentication/logout': 'authenticated',
-    '/user/info/get': 'authenticated',
+    '/user/info/getCurrent': 'authenticated',
+    '/user/info/getList': 'admin',
+    '/user/info/update': 'admin',
 
     '/catalog/categories/getOne': 'token',
     '/catalog/categories/getList': 'token',

@@ -42,8 +42,8 @@ define([
                 register: function (phone, password) {
                     return Http.post('/user/authentication/register', {phone: phone, password: password});
                 },
-                getUser: function (checkType) {
-                    var promise = Http.post('/user/info/get');
+                getCurrentUser: function (checkType) {
+                    var promise = Http.post('/user/info/getCurrent');
                     if (!checkType) {
                         return promise;
                     }
@@ -56,6 +56,21 @@ define([
                         }
                     }, function (reason) {
                         return $q.reject(reason);
+                    });
+                },
+                getList: function () {
+                    return Http.post('/user/info/getList');
+                },
+                update: function (id, phone, status, type, first_name, last_name, email, comment) {
+                    return Http.post('/user/info/update', {
+                        id: id,
+                        phone: phone,
+                        status: status,
+                        type: type,
+                        first_name: first_name,
+                        last_name: last_name,
+                        email: email,
+                        comment: comment
                     });
                 }
             };

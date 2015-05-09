@@ -15,6 +15,7 @@ define([
     './controllers/Logout',
     './controllers/Dashboard',
     './controllers/Categories',
+    './controllers/Users',
 
     './controllers/modals/DefaultModal'
 ], function () {});

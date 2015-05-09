@@ -5,8 +5,8 @@ define([
     var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toastr', 'core', 'user', 'catalog'])
         .config(['$routeProvider', function ($routeProvider) {
 
-            function getUser ($rootScope, User) {
-                return User.getUser('admin').then(function (response) {
+            function getCurrentUser ($rootScope, User) {
+                return User.getCurrentUser('admin').then(function (response) {
                     $rootScope.Base.user = response;
                     return response;
                 })
@@ -21,7 +21,7 @@ define([
                             '$rootScope',
                             'User',
                             function ($rootScope, User) {
-                                return getUser($rootScope, User);
+                                return getCurrentUser($rootScope, User);
                             }
                         ]
                     }
@@ -50,7 +50,7 @@ define([
                             '$rootScope',
                             'User',
                             function ($rootScope, User) {
-                                return getUser($rootScope, User);
+                                return getCurrentUser($rootScope, User);
                             }
                         ],
                         categories: [
@@ -70,6 +70,25 @@ define([
                                 } else {
                                     return null;
                                 }
+                            }
+                        ]
+                    }
+                })
+                .when('/users', {
+                    controller: 'Users',
+                    templateUrl: '/admin/views/controllers/users/index.html',
+                    resolve: {
+                        user: [
+                            '$rootScope',
+                            'User',
+                            function ($rootScope, User) {
+                                return getCurrentUser($rootScope, User);
+                            }
+                        ],
+                        users: [
+                            'User',
+                            function (User) {
+                                return User.getList();
                             }
                         ]
                     }

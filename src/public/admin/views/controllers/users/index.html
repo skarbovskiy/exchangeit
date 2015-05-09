@@ -1,0 +1,38 @@
+<h3 class="page-header">
+    <!--<button class="btn btn-default pull-right btn-info" ng-click="Users.create()" style="margin: 5px 5px 0 0">Добавить пользователя</button>-->
+    <ol class="breadcrumb">
+        <li><a href="admin.html#/users">Пользователи</a></li>
+        <!--<li ng-repeat="item in Categories.path"><a href="admin.html#/categories/{{item.id}}">{{item.name}}</a></li>-->
+    </ol>
+</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Статус</th>
+            <th>Роль</th>
+            <th>Телефон</th>
+            <th>ФИО</th>
+            <th>E-mail</th>
+            <th>Создан</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in Users.list">
+            <td>{{item.id}}</td>
+            <td>{{item.status}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.first_name}} {{item.last_name}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.created_date}}</td>
+            <td style="width: 20em">
+                <button type="button" class="btn btn-primary" ng-click="Users.edit(item)">Редактировать</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="well" ng-if="Users.list.length === 0">пользователи не найдены</div>
