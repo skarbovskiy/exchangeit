@@ -16,6 +16,36 @@ define([
             function ($scope, $route, $modal, toastr, Catalog, categories, path) {
                 $scope.Base.setActiveMenu('categories');
 
+                var categoryFieldsList = {
+                    id: {
+                        type: 'hidden'
+                    },
+                    name: {
+                        title: 'Название',
+                        type: 'text',
+                        placeholder: 'Тапки',
+                        required: true
+                    },
+                    active: {
+                        title: 'Активна',
+                        type: 'checkbox'
+                    },
+                    can_have_products: {
+                        title: 'Может содержать товары',
+                        type: 'checkbox'
+                    },
+                    min_price: {
+                        title: 'Минимальная цена товара',
+                        type: 'number',
+                        depends: 'can_have_products'
+                    },
+                    max_price: {
+                        title: 'Максимальная цена товара',
+                        type: 'number',
+                        depends: 'can_have_products'
+                    }
+                };
+
                 function updateList (promise) {
                     promise.then(function () {
                         return Catalog.getCategories($route.current.params.parent_id);
@@ -41,37 +71,7 @@ define([
                                 item: function () {
                                     var obj = {
                                         title: 'Создание категории',
-                                        fields: [
-                                            {
-                                                name: 'name',
-                                                title: 'Название',
-                                                type: 'text',
-                                                placeholder: 'Тапки',
-                                                required: true
-                                            },
-                                            {
-                                                name: 'active',
-                                                title: 'Активна',
-                                                type: 'checkbox'
-                                            },
-                                            {
-                                                name: 'can_have_products',
-                                                title: 'Может содержать товары',
-                                                type: 'checkbox'
-                                            },
-                                            {
-                                                name: 'min_price',
-                                                title: 'Минимальная цена товара',
-                                                type: 'number',
-                                                depends: 'can_have_products'
-                                            },
-                                            {
-                                                name: 'max_price',
-                                                title: 'Максимальная цена товара',
-                                                type: 'number',
-                                                depends: 'can_have_products'
-                                            }
-                                        ]
+                                        fields: _.cloneDeep(categoryFieldsList)
                                     };
                                     if ($scope.Categories.parent) {
                                         obj.title = 'Создание подкатегории (' + $scope.Categories.parent.name + ')';
@@ -85,6 +85,39 @@ define([
                             $scope.Core.loading = true;
                             updateList(
                                 Catalog.createCategory(
+                                    item.fields.name.value,
+                                    item.fields.active.value,
+                                    $scope.Categories.path ?
+                                        $scope.Categories.path[$scope.Categories.path.length - 1].id : null,
+                                    item.fields.can_have_products.value,
+                                    item.fields.min_price.value,
+                                    item.fields.max_price.value
+                                )
+                            );
+                        });
+                    },
+
+                    edit: function (item) {
+                        var modalInstance = $modal.open({
+                            templateUrl: '/admin/views/modals/create.html',
+                            controller: 'DefaultModal',
+                            size: 'lg',
+                            resolve: {
+                                item: function () {
+                                    return {
+                                        title: 'Редактирование категории',
+                                        fields: _.cloneDeep(categoryFieldsList),
+                                        values: item
+                                    };
+                                }
+                            }
+                        });
+
+                        modalInstance.result.then(function (item) {
+                            $scope.Core.loading = true;
+                            updateList(
+                                Catalog.updateCategory(
+                                    item.fields.id.value,
                                     item.fields.name.value,
                                     item.fields.active.value,
                                     $scope.Categories.path ?

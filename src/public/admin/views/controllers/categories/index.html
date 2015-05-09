@@ -1,8 +1,3 @@
-<style>
-    .deactivated {
-        color: grey;
-    }
-</style>
 <h3 class="page-header">
     <button class="btn btn-default pull-right btn-info" ng-click="Categories.create()" style="margin: 5px 5px 0 0">Добавить категорию</button>
     <ol class="breadcrumb">
@@ -16,22 +11,22 @@
         <tr>
             <th>#</th>
             <th>Название</th>
-            <th>Минимальная стоимость товара</th>
-            <th>Максимальная стоимость товара</th>
+            <th>Мин. $</th>
+            <th>Макс. $</th>
             <th>Действия</th>
         </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in Categories.list">
+            <tr ng-repeat="item in Categories.list" ng-class="{danger: !item.active}">
                 <td>{{item.id}}</td>
                 <td>
                     <span class="glyphicon glyphicon-ban-circle" aria-hidden="true" ng-if="!item.active" title="Категория не активна"></span>
-                    <a href="admin.html#/categories/{{item.id}}" ng-class="{deactivated: !item.active}">{{item.name}}</a>
+                    <a href="admin.html#/categories/{{item.id}}">{{item.name}}</a>
                 </td>
-                <td>{{Categories.prices[item.id].min}}</td>
-                <td>{{Categories.prices[item.id].max}}</td>
+                <td>{{item.min_price || Categories.prices[item.id].min}}</td>
+                <td>{{item.max_price || Categories.prices[item.id].max}}</td>
                 <td style="width: 20em">
-                    <button type="button" class="btn btn-primary">Редактировать</button>
+                    <button type="button" class="btn btn-primary" ng-click="Categories.edit(item)">Редактировать</button>
                     <button type="button" class="btn btn-danger" ng-click="Categories.remove(item)">Удалить</button>
                 </td>
             </tr>

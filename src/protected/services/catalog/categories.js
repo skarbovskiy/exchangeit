@@ -29,7 +29,27 @@ var Service = {
     },
 
     create: function (request, response) {
+        var minPrice = request.body.min_price;
+        var maxPrice = request.body.max_price;
+        if (minPrice && maxPrice && minPrice > maxPrice) {
+            var error = new Error('min price can\'t be bigger than max price');
+            error.status = 422;
+            return callback(error);
+        }
         categoriesModel.create(
+            request.body.name,
+            request.body.active,
+            request.body.parent_id,
+            request.body.can_have_products,
+            minPrice,
+            maxPrice,
+            response
+        )
+    },
+
+    update: function (request, response) {
+        categoriesModel.update(
+            request.body.id,
             request.body.name,
             request.body.active,
             request.body.parent_id,

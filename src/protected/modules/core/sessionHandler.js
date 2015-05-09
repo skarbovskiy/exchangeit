@@ -8,11 +8,18 @@ var keyLifeTime = 15 * 60; //15 minutes
 
 var accessMatrix = {
     '/user/authentication/get_token': 'noToken',
+    '/user/authentication/check_token': 'token',
     '/user/authentication/login': 'notAuthenticated',
     '/user/authentication/register': 'notAuthenticated',
     '/user/authentication/logout': 'authenticated',
     '/user/info/get': 'authenticated',
+
+    '/catalog/categories/getOne': 'token',
+    '/catalog/categories/getList': 'token',
+    '/catalog/categories/getPath': 'token',
+    '/catalog/categories/getCategoryPrices': 'token',
     '/catalog/categories/create': 'admin',
+    '/catalog/categories/update': 'admin',
     '/catalog/categories/remove': 'admin'
 };
 
@@ -91,6 +98,12 @@ module.exports = {
             }
             var session = data;
             var error = null;
+            if (!accessMatrix[path]) {
+                error = new Error('no acp found for endpoint');
+                error.status = 401;
+                return next(error);
+            }
+
             if (accessMatrix[path] === 'authenticated' && (!session.user || !session.user.id)) {
                 error = new Error('no user authenticated');
                 error.status = 401;

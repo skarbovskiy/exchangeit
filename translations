@@ -12,3 +12,4 @@ no user authenticated
 internal error
 bad phone or password passed
 user don't have permission to access
+min price can\'t be bigger than max price
