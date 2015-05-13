@@ -153,7 +153,6 @@ var Service = {
             error.status = 422;
             return callback(error);
         }
-        /*@todo add transactions*/
         pg(function (client, done) {
             client.setQuery(
                 'DELETE FROM catalog.categories WHERE id = $1 OR path SIMILAR TO $2',

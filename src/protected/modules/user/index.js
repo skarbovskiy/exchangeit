@@ -42,8 +42,8 @@ var User = {
         pg(function (client, done) {
             client.setQuery(
                 'SELECT * FROM users.users ' +
-                'WHERE users.phone = $1 AND users.password = $2',
-                [phone, helper.md5(password + salt)],
+                'WHERE users.phone = $1 AND users.password = $2 AND status = $3',
+                [phone, helper.md5(password + salt), 'active'],
                 function (error, data) {
                     done();
                     if (error) {
