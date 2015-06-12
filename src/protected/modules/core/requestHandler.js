@@ -3,42 +3,30 @@
 var lodash = require('lodash');
 var logger = require('./bootstrap').get('logger');
 
-function _handleResponse (requestObject, responseObject, responseCode, responseData, flags) {
-    if (flags.isRedirect) {
-        responseObject.redirect(responseData);
+/**
+ * @param request express object
+ * @param responseCallback express object
+ * @param responseArray [code, data, redirect flag]
+ */
+function handleResponse (request, responseCallback, responseArray) {
+    if (responseArray[2]) {
+        responseCallback.redirect(responseArray[1]);
     } else {
-        responseObject.status(responseCode).json(responseData);
+        responseCallback.status(responseArray[0]).json(responseArray[1]);
     }
-
-    var startTime = requestObject._startTime;
+    var startTime = request._startTime;
     var endTime = Date.now();
     var logEntry = {
-        requestIps: lodash.union(requestObject.ips, [requestObject.ip]),
-        requestPath: requestObject.path,
-        requestBody: JSON.stringify(requestObject.body),
-        requestHeaders: JSON.stringify(requestObject.headers),
-        responseCode: responseCode,
-        responseObject: JSON.stringify(responseData),
+        requestIps: lodash.union(request.ips, [request.ip]),
+        requestPath: request.originalUrl,
+        requestMethod: request.method,
+        requestBody: JSON.stringify(request.body),
+        requestHeaders: JSON.stringify(request.headers),
+        responseCode: responseArray[0],
+        responseObject: JSON.stringify(responseArray[1]),
         responseDuration: endTime - startTime
     };
     logger.info('request', logEntry);
 }
 
-module.exports = function (request, response, next) {
-    var sectionName = request.params.section;
-    var serviceName = request.params.service;
-    var functionName = request.params.function;
-    var service = require('../../services/' + sectionName + '/' + serviceName + '.js');
-    if (typeof(service[functionName]) === 'undefined') {
-        var error = new Error('service not found');
-        error.status = 404;
-        throw error;
-    }
-    var responseCallback = function (error, responseData, isRedirect) {
-        if (error) {
-            return next(error);
-        }
-        _handleResponse(request, response, 200, responseData, {isRedirect: isRedirect});
-    };
-    service[functionName](request, responseCallback, next);
-};
+module.exports = handleResponse;

@@ -39,5 +39,6 @@
     "maximumLineLength": 120,
     "safeContextKeyword": ["self", "that"],
     "validateLineBreaks": "LF",
-    "validateIndentation": 4
+    "validateIndentation": 4,
+    "excludeFiles": ["node_modules/**"]
 }

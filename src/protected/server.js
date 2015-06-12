@@ -22,70 +22,73 @@ var logger = new (winston.Logger)({
 });
 logger.info('starting application bootstrap');
 
-bootstrapper.init({logger: logger}, function (error) {
-    var requestHandler = require('./modules/core/requestHandler');//these must be required after init
-    var sessionHandler = require('./modules/core/sessionHandler');
+bootstrapper.init({logger: logger})
+    .then(function () {
+        logger.info('application bootstrapped successfully');
 
-    if (error) {
-        return logger.error('error while bootstrapping application', {message: error.message, stack: error.stack});
-    }
-    logger.info('application bootstrapped successfully');
+        var environment  = process.env.NODE_ENV || 'development';
+        //var useSSL = process.env.SSL === 'true';
 
-    var environment  = process.env.NODE_ENV || 'development';
-    //var useSSL = process.env.SSL === 'true';
+        logger.info('starting express');
+        var app = express();
 
-    logger.info('starting express');
-    var app = express();
-
-    //app.enable('trust proxy');
-    app.disable('x-powered-by');
-    app.set('port', process.env.PORT || 7777);
-    app.set('env', environment);
-    if (environment === 'development') {
-        app.use(morgan('dev'));
-    }
-
-    app.use(express.static(path.join(__dirname, '..', 'public')));
-    app.use(bodyParser.json());
-    app.use(sessionHandler.checker);
-
-    app.post('/:section/:service/:function', function (request, response, next) {
-        request._startTime = +new Date();
-        requestHandler(request, response, next);
-    });
-
-    app.use(function (error, request, response, next) {
-        if (error.status && error.json) {
-            logger.warn(
-                'application warning',
-                {message: error.message, stack: error.stack, status: error.status, json: error.json}
-            );
-            return response.status(error.status).json(error.json);
-        } else if (error.status) {
-            logger.warn('application warning', {message: error.message, stack: error.stack, status: error.status});
-            return response.status(error.status).json({error: error.message});
-        } else {
-            logger.error('application error', {message: error.message, stack: error.stack});
-            response.status(500).send({error: 'internal error'});
+        //app.enable('trust proxy');
+        app.disable('x-powered-by');
+        app.set('port', process.env.PORT || 7777);
+        app.set('env', environment);
+        if (environment === 'development') {
+            app.use(morgan('dev'));
         }
-    });
 
-    //server = null;
-    //if (useSSL) {
-    //    var options = {
-    //        pfx: fs.readFileSync(path.join(__dirname, '..', '..', 'externals/ssl-keys/' + appName + '.pfx')),
-    //        passphrase: fs.readFileSync(path.join(__dirname, '..', '..', 'externals/ssl-keys/' + appName + '.pwd'))
-    //    };
-    //    server = https.createServer(options, app);
-    //} else {
-    var server = http.createServer(app);
-    //}
+        app.use(express.static(path.join(__dirname, '..', 'public')));
+        app.use(bodyParser.json());
 
-    server.listen(app.get('port'), function () {
-        logger.info(
-            'application started',
-            {pid: process.pid, port: app.get('port'), environment: environment}
+        app.use(function (request, response, next) {
+            response._startTime = Date.now();
+            next();
+        });
+
+        app.use(require('./routes'));
+
+        app.use(function (error, request, response, next) {
+            if (error.status && error.json) {
+                logger.warn(
+                    'application warning',
+                    {message: error.message, stack: error.stack, status: error.status, json: error.json}
+                );
+                return response.status(error.status).json(error.json);
+            } else if (error.status) {
+                logger.warn('application warning', {message: error.message, stack: error.stack, status: error.status});
+                return response.status(error.status).json({error: error.message});
+            } else {
+                logger.error('application error', {message: error.message, stack: error.stack});
+                response.status(500).send({error: 'internal error'});
+            }
+        });
+
+        //server = null;
+        //if (useSSL) {
+        //    var options = {
+        //        pfx: fs.readFileSync(path.join(__dirname, '..', '..', 'externals/ssl-keys/' + appName + '.pfx')),
+        //        passphrase: fs.readFileSync(path.join(__dirname, '..', '..', 'externals/ssl-keys/' + appName + '.pwd'))
+        //    };
+        //    server = https.createServer(options, app);
+        //} else {
+        var server = http.createServer(app);
+        //}
+
+        server.listen(app.get('port'), function () {
+            logger.info(
+                'application started',
+                {pid: process.pid, port: app.get('port'), environment: environment}
+            );
+        });
+    })
+    .catch(function (error) {
+        return logger.error(
+            'error while bootstrapping application',
+            {message: error.message || JSON.stringify(error), stack: error.stack}
         );
-    });
-});
+    })
+
 

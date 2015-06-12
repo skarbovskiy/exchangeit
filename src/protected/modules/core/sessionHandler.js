@@ -1,8 +1,10 @@
 'use strict';
 var lodash = require('lodash');
+var Promise = require('bluebird');
 var uuid = require('node-uuid');
 
 var redis = require('./bootstrap').get('redis');
+var HttpError = require('../core/errors').HttpError;
 
 var keyLifeTime = 15 * 60; //15 minutes
 
@@ -27,117 +29,110 @@ var accessMatrix = {
 
 var Store = {
     checker: {
-        process: function (token, ip, callback) {
-            Store.checker._getDataFromRedis(token, function (error, data) {
-                if (!error) {
-                    Store.checker._updateUserActivity(token);
-                }
-                callback(error, data);
+        process: function (token, ip) {
+            return Store.checker._getDataFromRedis(token).then(function (data) {
+                Store.checker._updateUserActivity(token);
+                return data;
             });
         },
-        _getDataFromRedis: function (token, callback) {
-            redis.hgetall('session_' + token, function (error, data) {
-                if (error || !data) {
-                    return callback(error ? error : new Error('no auth data found'), null);
-                }
-                var returnObject = {};
-                lodash.keys(data).forEach(function (key) {
-                    returnObject[key] = JSON.parse(data[key]);
+        _getDataFromRedis: function (token) {
+            return Promise.fromNode(redis.hgetall.bind(redis, 'session_' + token))
+                .then(function (data) {
+                    var returnObject = {};
+                    lodash.keys(data).forEach(function (key) {
+                        returnObject[key] = JSON.parse(data[key]);
+                    });
+                    return returnObject;
                 });
-                callback(null, returnObject);
-            });
         },
         _updateUserActivity: function (token) {
             redis.expire('session_' + token, keyLifeTime);
         }
     },
     creator: {
-        process: function (token, ip, data, callback) {
+        process: function (token, ip, data) {
             if (!token) {
                 token = uuid.v4();
                 data.createdAt = Date.now();
             }
             data.ip = ip;
             data.updatedAt = Date.now();
-            Store.creator._passDataToRedis(token, data, function (error) {
-                callback(error, token);
-            });
+            return Store.creator._passDataToRedis(token, data)
+                .then(function () {
+                    return token;
+                });
         },
-        _passDataToRedis: function (token, data, callback) {
+        _passDataToRedis: function (token, data) {
             lodash.keys(data).forEach(function (objectKey) {
                 data[objectKey] = JSON.stringify(data[objectKey]);
             });
-            redis.hmset('session_' + token, data, function (error) {
-                if (error) {
-                    return callback(error);
-                }
-                redis.expire('session_' + token, keyLifeTime, function (error) {
-                    callback(error);
+            return Promise.fromNode(redis.hmset.bind(redis, 'session_' + token, data))
+                .then(function () {
+                    return Promise.fromNode(redis.expire.bind(redis, 'session_' + token, keyLifeTime));
                 });
-            });
         }
     }
 };
 
-module.exports = {
-    checker: function (request, response, next) {
-        var path = request.path;
-        var token = request.header('auth-token');
-        if (!token && accessMatrix[path] === 'noToken') {
-            return next();
-        }
-        if (!token) {
-            var error = new Error('no auth-token provided');
-            error.status = 403;
-            return next(error);
-        }
-        Store.checker.process(token, request.ip, function (storeError, data) {
-            if (storeError) {
-                if (storeError.message === 'no auth data found') {
-                    storeError.status = 403;
-                }
-                return next(storeError);
+function getTokenData (request) {
+    var token = request.header('auth-token');
+    if (!token) {
+        throw new HttpError(403, 'no auth-token provided');
+    }
+    return Store.checker.process(token, request.ip)
+        .then(function (data) {
+            if (!data || lodash.isEmpty(data)) {
+                throw new HttpError(403, 'no auth data found');
             }
             var session = data;
-            var error = null;
-            if (!accessMatrix[path]) {
-                error = new Error('no acp found for endpoint');
-                error.status = 401;
-                return next(error);
-            }
-
-            if (accessMatrix[path] === 'authenticated' && (!session.user || !session.user.id)) {
-                error = new Error('no user authenticated');
-                error.status = 401;
-                return next(error);
-            }
-
-            if (accessMatrix[path] === 'admin' &&
-                (
-                    (!session.user || !session.user.id) || session.user.type !== 'admin'
-                )
-            ) {
-                error = new Error('user don\'t have permission to access');
-                error.status = 401;
-                return next(error);
-            }
-
-            if (accessMatrix[path] === 'notAuthenticated' && session.user && session.user.id) {
-                error = new Error('already authenticated');
-                error.status = 409;
-                return next(error);
-            }
-
-            session.set = function (newData, callback) {
+            session.set = function (newData) {
                 return (function () {
-                    Store.creator.process(token, request.ip, newData, callback);
+                    return Store.creator.process(token, request.ip, newData);
                 })();
             };
             request.session = session;
+        });
+}
+
+module.exports = {
+    checkToken: function (request, response, next) {
+        getTokenData(request).then(function () {
             next();
+        }).catch(function (error) {
+            next(error);
         });
     },
-    create: function (ip, data, callback) {
-        return Store.creator.process(null, ip, data, callback);
+    checkUser: function (request, response, next) {
+        getTokenData(request).then(function () {
+            if (!request.session.user || !request.session.user.id) {
+                return next(new HttpError(401, 'no user authenticated'));
+            }
+            next();
+        }).catch(function (error) {
+            next(error);
+        });
+    },
+    checkAdmin: function (request, response, next) {
+        getTokenData(request).then(function () {
+            if ((!request.session.user || !request.session.user.id) || request.session.user.type !== 'admin') {
+                return next(new HttpError(401, 'user don\'t have permission to access'));
+            }
+            next();
+        }).catch(function (error) {
+            next(error);
+        });
+    },
+    checkNotLogged: function (request, response, next) {
+        getTokenData(request).then(function () {
+            if (request.session.user && request.session.user.id) {
+                return next(new HttpError(409, 'already authenticated'));
+            }
+            next();
+        }).catch(function (error) {
+            next(error);
+        });
+    },
+    create: function (ip, data) {
+        return Store.creator.process(null, ip, data);
     }
 };

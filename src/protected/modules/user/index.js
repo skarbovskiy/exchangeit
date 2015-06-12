@@ -1,5 +1,6 @@
 'use strict';
-var pg = require('../core/bootstrap').get('pg');
+//DEPRECATED
+var orm = require('../core/bootstrap').get('orm');
 var helper = require('./helper');
 
 var salt = 'wef*(&hfwjekfh*0flm';
