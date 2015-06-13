@@ -18,9 +18,9 @@ var User = orm.define('User', {
     },
     password: Sequelize.TEXT,
     status: {
-        type: Sequelize.ENUM('not-activated', 'active', 'blocked', 'deleted')
+        type: Sequelize.TEXT
     },
-    type: Sequelize.ENUM('normal', 'admin'),
+    type: Sequelize.TEXT,
     comment: Sequelize.TEXT,
     firstName: {
         type: Sequelize.TEXT,
