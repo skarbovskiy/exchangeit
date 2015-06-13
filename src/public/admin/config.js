@@ -1,7 +1,7 @@
 require.config({
     deps: ['bootstrap'],
     paths: {
-        'jquery': '../lib/jquery/dist/jquery.min',
+        'jquery': '../lib/jquery/jquery.min',
         'angular': '../lib/angular/angular',
         'angularAnimate': '../lib/angular-animate/angular-animate.min',
         'angularToaster': '../lib/angular-toastr/angular-toastr.tpls.min',
