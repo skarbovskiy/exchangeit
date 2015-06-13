@@ -87,16 +87,14 @@ var Category = orm.define('Category', {
             });
         },
         destroyWithChildren: function (id) {
-            return Category.destroy(
-                {
-                    where: {
-                        $or: [
-                            {id: id},
-                            ['path SIMILAR TO ?', '%/' + id + '/%']
-                        ]
-                    }
+            return Category.destroy({
+                where: {
+                    $or: [
+                        {id: id},
+                        ['path SIMILAR TO ?', '%/' + id + '/%']
+                    ]
                 }
-            );
+            });
         }
     },
     validate: {

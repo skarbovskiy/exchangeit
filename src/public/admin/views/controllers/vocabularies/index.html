@@ -1,0 +1,29 @@
+<h3 class="page-header">
+    <button class="btn btn-default pull-right btn-info" ng-click="Vocabularies.create()" style="margin: 5px 5px 0 0">Добавить словарь</button>
+    <ol class="breadcrumb">
+        <li><a href="admin.html#/users">Словари</a></li>
+        <!--<li ng-repeat="item in Categories.path"><a href="admin.html#/categories/{{item.id}}">{{item.name}}</a></li>-->
+    </ol>
+</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in Vocabularies.list">
+            <td>{{item.id}}</td>
+            <td><a href="admin.html#/">{{item.name}}</a></td>
+            <td style="width: 20em">
+                <button type="button" class="btn btn-primary" ng-click="Vocabularies.edit(item)">Редактировать</button>
+                <button type="button" class="btn btn-danger" ng-click="Vocabularies.remove(item)">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="well" ng-if="Users.list.length === 0">пользователи не найдены</div>

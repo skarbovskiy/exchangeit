@@ -8,14 +8,15 @@ define([
 
     './controllers/Base',
     './controllers/Login',
-
-    './services/Users',
-    './services/Categories',
-
     './controllers/Logout',
     './controllers/Dashboard',
     './controllers/Categories',
     './controllers/Users',
+    './controllers/Vocabularies',
 
-    './controllers/modals/DefaultModal'
+    './controllers/modals/DefaultModal',
+
+    './services/Users',
+    './services/Categories',
+    './services/Vocabularies'
 ], function () {});

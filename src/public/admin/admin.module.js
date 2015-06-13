@@ -93,6 +93,25 @@ define([
                         ]
                     }
                 })
+                .when('/vocabularies', {
+                    controller: 'Vocabularies',
+                    templateUrl: '/admin/views/controllers/vocabularies/index.html',
+                    resolve: {
+                        user: [
+                            '$rootScope',
+                            'User',
+                            function ($rootScope, User) {
+                                return getCurrentUser($rootScope, User);
+                            }
+                        ],
+                        list: [
+                            'Vocabularies',
+                            function (Vocabularies) {
+                                return Vocabularies.getList();
+                            }
+                        ]
+                    }
+                })
         }]);
 
     return admin;

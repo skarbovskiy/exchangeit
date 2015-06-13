@@ -6,7 +6,9 @@ bootstrapper.init({logger: console.log})
         var orm = bootstrapper.get('orm');
         require('./modules/models/category');
         require('./modules/models/user');
-        return orm.sync({force: true});
+        require('./modules/models/vocabulary');
+        require('./modules/models/vocabularyContent');
+        return orm.sync({force: false});
     })
     .then(function () {
         console.log('sync finished');
