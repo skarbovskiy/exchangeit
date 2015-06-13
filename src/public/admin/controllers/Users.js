@@ -5,12 +5,12 @@ define([
 
     admin.controller(
         'Users',
-        ['$scope', '$modal', 'toastr', 'User', 'users', function ($scope, $modal, toastr, User, users) {
+        ['$scope', '$modal', 'toastr', 'Users', 'users', function ($scope, $modal, toastr, Users, users) {
             $scope.Base.setActiveMenu('users');
 
             function updateList (promise) {
                 promise.then(function () {
-                    return User.getList();
+                    return Users.getList();
                 })
                     .then(function (response) {
                         $scope.Users.list = response;
@@ -21,7 +21,7 @@ define([
                     });
             }
 
-            var Users = {
+            var Controller = {
                 list: users,
                 edit: function (item) {
                     var modalInstance = $modal.open({
@@ -53,12 +53,12 @@ define([
                                             title: 'Роль',
                                             required: true
                                         },
-                                        first_name: {
+                                        firstName: {
                                             type: 'text',
                                             title: 'Имя',
                                             required: false
                                         },
-                                        last_name: {
+                                        lastName: {
                                             type: 'text',
                                             title: 'Фамилия',
                                             required: false
@@ -83,13 +83,13 @@ define([
                     modalInstance.result.then(function (item) {
                         $scope.Core.loading = true;
                         updateList(
-                            User.update(
+                            Users.update(
                                 item.fields.id.value,
                                 item.fields.phone.value,
                                 item.fields.status.value,
                                 item.fields.type.value,
-                                item.fields.first_name.value,
-                                item.fields.last_name.value,
+                                item.fields.firstName.value,
+                                item.fields.lastName.value,
                                 item.fields.email.value,
                                 item.fields.comment.value
                             )
@@ -98,7 +98,7 @@ define([
                 }
             }
 
-            $scope.Users = Users;
+            $scope.Users = Controller;
         }]
     );
 });

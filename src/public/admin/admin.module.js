@@ -2,7 +2,7 @@
 define([
     'angular'
 ], function (angular) {
-    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toastr', 'core', 'user', 'catalog'])
+    var admin = angular.module('admin', ['ngRoute', 'ui.bootstrap', 'toastr', 'core'])
         .config(['$routeProvider', function ($routeProvider) {
 
             function getCurrentUser ($rootScope, User) {
@@ -31,9 +31,9 @@ define([
                     templateUrl: '/admin/views/controllers/login/index.html',
                     resolve: {
                         token: [
-                            'User',
-                            function (User) {
-                                return User.getToken();
+                            'Session',
+                            function (Session) {
+                                return Session.getToken();
                             }
                         ]
                     }
@@ -55,18 +55,18 @@ define([
                         ],
                         categories: [
                             '$route',
-                            'Catalog',
-                            function ($route, Catalog) {
-                                return Catalog.getCategories($route.current.params.parent_id);
+                            'Categories',
+                            function ($route, Categories) {
+                                return Categories.getList($route.current.params.parent_id);
                             }
                         ],
                         path: [
                             '$route',
-                            'Catalog',
-                            function ($route, Catalog) {
+                            'Categories',
+                            function ($route, Categories) {
                                 var id = $route.current.params.parent_id;
                                 if (id && id !== 'null') {
-                                    return Catalog.getCategoryPath(id);
+                                    return Categories.getPath(id);
                                 } else {
                                     return null;
                                 }
@@ -86,9 +86,9 @@ define([
                             }
                         ],
                         users: [
-                            'User',
-                            function (User) {
-                                return User.getList();
+                            'Users',
+                            function (Users) {
+                                return Users.getList();
                             }
                         ]
                     }

@@ -10,7 +10,9 @@ var User = orm.define('User', {
     phone: {
         type: Sequelize.TEXT,
         unique: true,
+        allowNull: false,
         validate: {
+            notEmpty: true,
             is: /^\+[0-9]{10,13}$/
         }
     },
@@ -43,7 +45,3 @@ var User = orm.define('User', {
 });
 
 module.exports = User;
-
-/*
- "8";"+380982850620";"ac5e9b81cf6794265ff34d52f67189a5";"active";"admin";"2015-04-29 19:08:01.705389+00";"test";"Георгий";"Скарбовский";"george.skarbovskiy@gmail.com"
- */

@@ -10,10 +10,10 @@ define([
             '$route',
             '$modal',
             'toastr',
-            'Catalog',
+            'Categories',
             'categories',
             'path',
-            function ($scope, $route, $modal, toastr, Catalog, categories, path) {
+            function ($scope, $route, $modal, toastr, Categories, categories, path) {
                 $scope.Base.setActiveMenu('categories');
 
                 var categoryFieldsList = {
@@ -30,25 +30,25 @@ define([
                         title: 'Активна',
                         type: 'checkbox'
                     },
-                    can_have_products: {
+                    canHaveProducts: {
                         title: 'Может содержать товары',
                         type: 'checkbox'
                     },
-                    min_price: {
+                    minPrice: {
                         title: 'Минимальная цена товара',
                         type: 'number',
-                        depends: 'can_have_products'
+                        depends: 'canHaveProducts'
                     },
-                    max_price: {
+                    maxPrice: {
                         title: 'Максимальная цена товара',
                         type: 'number',
-                        depends: 'can_have_products'
+                        depends: 'canHaveProducts'
                     }
                 };
 
                 function updateList (promise) {
                     promise.then(function () {
-                        return Catalog.getCategories($route.current.params.parent_id);
+                        return Categories.getList($route.current.params.parent_id);
                     })
                         .then(function (response) {
                             $scope.Categories.list = response;
@@ -58,7 +58,7 @@ define([
                             toastr.error(reason.message.error, 'Произошла ошибка');
                         });
                 }
-                var Categories = {
+                var Controller = {
                     list: categories,
                     path: path,
                     prices: {},
@@ -84,14 +84,14 @@ define([
                         modalInstance.result.then(function (item) {
                             $scope.Core.loading = true;
                             updateList(
-                                Catalog.createCategory(
+                                Categories.create(
                                     item.fields.name.value,
                                     item.fields.active.value,
                                     $scope.Categories.path ?
                                         $scope.Categories.path[$scope.Categories.path.length - 1].id : null,
-                                    item.fields.can_have_products.value,
-                                    item.fields.min_price.value,
-                                    item.fields.max_price.value
+                                    item.fields.canHaveProducts.value,
+                                    item.fields.minPrice.value,
+                                    item.fields.maxPrice.value
                                 )
                             );
                         });
@@ -116,15 +116,15 @@ define([
                         modalInstance.result.then(function (item) {
                             $scope.Core.loading = true;
                             updateList(
-                                Catalog.updateCategory(
+                                Categories.update(
                                     item.fields.id.value,
                                     item.fields.name.value,
                                     item.fields.active.value,
                                     $scope.Categories.path ?
                                         $scope.Categories.path[$scope.Categories.path.length - 1].id : null,
-                                    item.fields.can_have_products.value,
-                                    item.fields.min_price.value,
-                                    item.fields.max_price.value
+                                    item.fields.canHaveProducts.value,
+                                    item.fields.minPrice.value,
+                                    item.fields.maxPrice.value
                                 )
                             );
                         });
@@ -145,7 +145,7 @@ define([
                         modalInstance.result.then(function (item) {
                             $scope.Core.loading = true;
                             updateList(
-                                Catalog.removeCategory(
+                                Categories.remove(
                                     item.id
                                 )
                             );
@@ -153,14 +153,14 @@ define([
                     }
                 };
 
-                Categories.list.forEach(function (category) {
-                    Catalog.getPrices(category.id)
+                Controller.list.forEach(function (category) {
+                    Categories.getPrices(category.id)
                         .then(function (prices) {
                             $scope.Categories.prices[category.id] = prices;
                         });
                 });
 
-                $scope.Categories = Categories;
+                $scope.Categories = Controller;
             }
         ]
     );

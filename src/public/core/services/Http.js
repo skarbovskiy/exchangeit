@@ -42,7 +42,7 @@ define([
                     getSubDomainString() +  $location.host() + ':' + $location.port() + HTTP.baseURL;
             };
 
-            HTTP.post = function (url, data) {
+            function makeRequest (type, url, data) {
                 data = data || {};
 
                 var defer = $q.defer();
@@ -51,7 +51,7 @@ define([
                     var token = $window.localStorage.getItem('session') || undefined;
                     data = data || {};
                     var request = {
-                        method: 'POST',
+                        method: type,
                         url: url,
                         headers: {
                             'auth-token': token
@@ -72,6 +72,22 @@ define([
 
                     return defer.promise;
                 }());
+            }
+
+            HTTP.post = function (url, data) {
+                return makeRequest ('POST', url, data);
+            };
+
+            HTTP.put = function (url, data) {
+                return makeRequest ('PUT', url, data);
+            };
+
+            HTTP.delete = function (url) {
+                return makeRequest ('DELETE', url);
+            };
+
+            HTTP.get = function (url) {
+                return makeRequest ('GET', url);
             };
             return HTTP;
         }

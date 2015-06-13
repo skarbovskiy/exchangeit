@@ -35,7 +35,8 @@ define([
                                 toastr.success('прошла успешно.', 'Аутентификация');
                                 $scope.Base.authenticated = true;
                                 $location.path('/');
-                            }, function (reason) {
+                            })
+                            .catch(function (reason) {
                                 $scope.Core.loading = false;
                                 $scope.Login.alerts = [{type: 'danger', msg: reason.message.error}];
                             });

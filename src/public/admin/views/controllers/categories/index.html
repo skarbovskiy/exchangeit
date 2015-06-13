@@ -23,8 +23,8 @@
                     <span class="glyphicon glyphicon-ban-circle" aria-hidden="true" ng-if="!item.active" title="Категория не активна"></span>
                     <a href="admin.html#/categories/{{item.id}}">{{item.name}}</a>
                 </td>
-                <td>{{item.min_price || Categories.prices[item.id].min}}</td>
-                <td>{{item.max_price || Categories.prices[item.id].max}}</td>
+                <td>{{item.minPrice || Categories.prices[item.id].min}}</td>
+                <td>{{item.maxPrice || Categories.prices[item.id].max}}</td>
                 <td style="width: 20em">
                     <button type="button" class="btn btn-primary" ng-click="Categories.edit(item)">Редактировать</button>
                     <button type="button" class="btn btn-danger" ng-click="Categories.remove(item)">Удалить</button>
