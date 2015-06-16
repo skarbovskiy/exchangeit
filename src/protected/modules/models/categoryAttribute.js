@@ -52,5 +52,4 @@ var CategoryAttribute = orm.define('CategoryAttribute', {
     schema: 'catalog'
 });
 CategoryAttribute.belongsTo(Vocabulary, {foreignKey : 'vocabularyId'});
-CategoryAttribute.belongsTo(Category, {foreignKey : 'categoryId'});
 module.exports = CategoryAttribute;

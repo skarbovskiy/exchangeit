@@ -12,6 +12,9 @@ var Service = {
             where: {
                 parentId: parentId
             },
+            order: [
+                ['name', 'ASC']
+            ],
             raw: true
         }).then(function (data) {
             return [200, data];
