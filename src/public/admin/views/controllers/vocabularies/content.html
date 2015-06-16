@@ -1,0 +1,27 @@
+<h3 class="page-header">
+    <button class="btn btn-default pull-right btn-info" ng-click="VocabularyContent.create()" style="margin: 5px 5px 0 0">Добавить значение</button>
+    <ol class="breadcrumb">
+        <li><a href="admin.html#/vocabularies">Словари</a></li>
+        <li><a href="admin.html#/vocabularies/{{VocabularyContent.vocabulary.id}}">{{VocabularyContent.vocabulary.name}}</a></li>
+    </ol>
+</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Значение</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in VocabularyContent.list">
+            <td>{{item.value}}</td>
+            <td style="width: 20em">
+                <button type="button" class="btn btn-primary" ng-click="VocabularyContent.edit(item)">Редактировать</button>
+                <button type="button" class="btn btn-danger" ng-click="VocabularyContent.remove(item)">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="well" ng-if="VocabularyContent.list.length === 0">пользователи не найдены</div>

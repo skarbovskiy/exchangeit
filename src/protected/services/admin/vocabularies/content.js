@@ -1,5 +1,6 @@
 'use strict';
 var VocabularyContent = require('../../../modules/models/vocabularyContent');
+var Vocabulary = require('../../../modules/models/vocabulary');
 var HttpError = require('../../../modules/core/errors').HttpError;
 var Service = {
     getList: function (request) {
@@ -7,10 +8,9 @@ var Service = {
         if (!vocabularyId) {
             throw new HttpError(400, 'bad data passed');
         }
-        return VocabularyContent.findAll({
-            where: {vocabularyId: vocabularyId},
-            raw: true
-        }).then(function (data) {
+        return Vocabulary.findOne(
+            {where: {id: vocabularyId}, row: true, include: [VocabularyContent]}
+        ).then(function (data) {
             return [200, data];
         });
     },

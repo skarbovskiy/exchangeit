@@ -1,7 +1,6 @@
 'use strict';
 var orm = require('../../modules/core/bootstrap').get('orm');
 var Sequelize = require('sequelize');
-var Vocabulary = require('./vocabulary');
 var VocabularyContent = orm.define('VocabularyContent', {
     id: {
         type: Sequelize.INTEGER,
@@ -30,7 +29,5 @@ var VocabularyContent = orm.define('VocabularyContent', {
     tableName: 'vocabulary_content',
     schema: 'catalog'
 });
-
-VocabularyContent.belongsTo(Vocabulary, {foreignKey: 'vocabularyId'});
 
 module.exports = VocabularyContent;

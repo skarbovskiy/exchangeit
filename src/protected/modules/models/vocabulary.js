@@ -1,6 +1,7 @@
 'use strict';
 var orm = require('../../modules/core/bootstrap').get('orm');
 var Sequelize = require('sequelize');
+var VocabularyContent = require('./vocabularyContent');
 var Vocabulary = orm.define('Vocabulary', {
     id: {
         type: Sequelize.INTEGER,
@@ -22,5 +23,6 @@ var Vocabulary = orm.define('Vocabulary', {
     tableName: 'vocabularies',
     schema: 'catalog'
 });
+Vocabulary.hasMany(VocabularyContent, {foreignKey : 'vocabularyId'});
 
 module.exports = Vocabulary;

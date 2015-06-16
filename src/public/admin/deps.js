@@ -13,6 +13,7 @@ define([
     './controllers/Categories',
     './controllers/Users',
     './controllers/Vocabularies',
+    './controllers/VocabularyContent',
 
     './controllers/modals/DefaultModal',
 

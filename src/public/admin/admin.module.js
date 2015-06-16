@@ -112,6 +112,26 @@ define([
                         ]
                     }
                 })
+                .when('/vocabulary/:vocabularyId/content', {
+                    controller: 'VocabularyContent',
+                    templateUrl: '/admin/views/controllers/vocabularies/content.html',
+                    resolve: {
+                        user: [
+                            '$rootScope',
+                            'User',
+                            function ($rootScope, User) {
+                                return getCurrentUser($rootScope, User);
+                            }
+                        ],
+                        content: [
+                            '$route',
+                            'Vocabularies',
+                            function ($route, Vocabularies) {
+                                return Vocabularies.content.getList($route.current.params.vocabularyId);
+                            }
+                        ]
+                    }
+                })
         }]);
 
     return admin;

@@ -17,7 +17,7 @@
         <tbody>
         <tr ng-repeat="item in Vocabularies.list">
             <td>{{item.id}}</td>
-            <td><a href="admin.html#/">{{item.name}}</a></td>
+            <td><a href="admin.html#/vocabulary/{{item.id}}/content">{{item.name}}</a></td>
             <td style="width: 20em">
                 <button type="button" class="btn btn-primary" ng-click="Vocabularies.edit(item)">Редактировать</button>
                 <button type="button" class="btn btn-danger" ng-click="Vocabularies.remove(item)">Удалить</button>
@@ -26,4 +26,4 @@
         </tbody>
     </table>
 </div>
-<div class="well" ng-if="Users.list.length === 0">пользователи не найдены</div>
+<div class="well" ng-if="Vocabularies.list.length === 0">пользователи не найдены</div>
