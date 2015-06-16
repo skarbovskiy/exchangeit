@@ -2,6 +2,7 @@
 var orm = require('../../modules/core/bootstrap').get('orm');
 var Sequelize = require('sequelize');
 var Vocabulary = require('./vocabulary');
+var Category = require('./category');
 var CategoryAttribute = orm.define('CategoryAttribute', {
     id: {
         type: Sequelize.INTEGER,
@@ -25,7 +26,7 @@ var CategoryAttribute = orm.define('CategoryAttribute', {
         },
         unique: 'categoryAttribute'
     },
-    type: { //date, select
+    type: { //'text', 'date', 'checkbox', 'select'
         type: Sequelize.TEXT,
         allowNull: false,
         validate: {
@@ -51,4 +52,5 @@ var CategoryAttribute = orm.define('CategoryAttribute', {
     schema: 'catalog'
 });
 CategoryAttribute.belongsTo(Vocabulary, {foreignKey : 'vocabularyId'});
+CategoryAttribute.belongsTo(Category, {foreignKey : 'categoryId'});
 module.exports = CategoryAttribute;

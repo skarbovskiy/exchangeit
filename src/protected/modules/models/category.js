@@ -3,7 +3,6 @@ var orm = require('../../modules/core/bootstrap').get('orm');
 var Promise = require('bluebird');
 var lodash = require('lodash');
 var Sequelize = require('sequelize');
-var CategoryAttribute = require('./categoryAttribute');
 var Category = orm.define('Category', {
     id: {
         type: Sequelize.INTEGER,
@@ -113,6 +112,5 @@ var Category = orm.define('Category', {
 });
 
 Category.belongsTo(Category, {foreignKey: 'parentId'});
-Category.hasMany(CategoryAttribute, {foreignKey : 'categoryId'});
 
 module.exports = Category;

@@ -1,36 +1,38 @@
 'use strict';
 var orm = require('../../modules/core/bootstrap').get('orm');
 var Sequelize = require('sequelize');
-var Vocabulary = require('./vocabulary');
-var VocabularyContent = orm.define('VocabularyContent', {
+var Item = require('./item');
+var CategoryAttribute = require('./categoryAttribute');
+var ItemPhoto = orm.define('ItemPhoto', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    vocabularyId: {
+    itemId: {
         type: Sequelize.INTEGER,
-        field: 'vocabulary_id',
+        field: 'item_id',
+        unique: 'itemPhoto',
         allowNull: false,
         validate: {
             notEmpty: true
-        },
-        unique: 'vocabularyValue'
+        }
     },
-    value: {
-        type: Sequelize.TEXT,
+    path: {
+        type: Sequelize.INTEGER,
+        field: 'attribute_id',
         allowNull: false,
         validate: {
             notEmpty: true
         },
-        unique: 'vocabularyValue'
+        unique: 'itemPhoto'
     }
 }, {
     underscored: true,
     timestamps: true,
     freezeTableName: true,
-    tableName: 'vocabulary_content',
+    tableName: 'item_photo',
     schema: 'catalog'
 });
-VocabularyContent.belongsTo(Vocabulary, {foreignKey : 'vocabularyId'});
-module.exports = VocabularyContent;
+ItemPhoto.belongsTo(Item, {foreignKey : 'itemId'});
+module.exports = ItemPhoto;

@@ -9,6 +9,9 @@ bootstrapper.init({logger: console.log})
         require('./modules/models/user');
         require('./modules/models/vocabulary');
         require('./modules/models/vocabularyContent');
+        require('./modules/models/item');
+        require('./modules/models/itemAttribute');
+        require('./modules/models/itemPhotos');
         return orm.sync({force: false});
     })
     .then(function () {

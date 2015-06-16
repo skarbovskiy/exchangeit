@@ -23,7 +23,7 @@ define([
                 type: {
                     title: 'Тип',
                     type: 'select',
-                    options: ['date', 'select'],
+                    options: ['text', 'date', 'checkbox', 'select'],
                     required: true
                 },
                 vocabularyId: {

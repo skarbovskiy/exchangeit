@@ -21,6 +21,14 @@ var logger = new (winston.Logger)({
         })
     ]
 });
+
+//process.on('uncaughtException', function (exception) {
+//    console.log(exception);
+//    logger.error('fatal', {message: error.message || JSON.stringify(error), stack: exception.stack}, function () {
+//        process.exit(1);
+//    });
+//});
+
 logger.info('starting application bootstrap');
 
 bootstrapper.init({logger: logger})
