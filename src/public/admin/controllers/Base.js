@@ -27,10 +27,6 @@ define([
                     link: 'admin.html#/categories/null',
                     title: 'Категории'
                 },
-                vocabularies: {
-                    link: 'admin.html#/vocabularies',
-                    title: 'Словари'
-                },
                 users: {
                     link: 'admin.html#/users',
                     title: 'Пользователи'

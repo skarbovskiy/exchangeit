@@ -6,7 +6,7 @@ define([
     admin.controller(
         'VocabularyContent',
         ['$scope', '$modal', 'toastr', 'Vocabularies', 'content', function ($scope, $modal, toastr, Vocabularies, content) {
-            $scope.Base.setActiveMenu('vocabularies');
+            $scope.Base.setActiveMenu();
 
             var fieldsList = {
                 id: {
