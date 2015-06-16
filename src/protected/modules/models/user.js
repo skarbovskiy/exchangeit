@@ -17,10 +17,10 @@ var User = orm.define('User', {
         }
     },
     password: Sequelize.TEXT,
-    status: {
+    status: { //active, blocked, deleted
         type: Sequelize.TEXT
     },
-    type: Sequelize.TEXT,
+    type: Sequelize.TEXT, //normal, admin
     comment: Sequelize.TEXT,
     firstName: {
         type: Sequelize.TEXT,

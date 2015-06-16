@@ -17,7 +17,7 @@ define([
                         $scope.Core.loading = false;
                     }, function (reason) {
                         $scope.Core.loading = false;
-                        toastr.error(reason.message.error, 'Произошла ошибка');
+                        toastr.error(reason.message.error || reason.message, 'Произошла ошибка');
                     });
             }
 

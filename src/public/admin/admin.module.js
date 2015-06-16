@@ -42,7 +42,7 @@ define([
                     controller: 'Logout',
                     templateUrl: '/admin/views/controllers/login/index.html'
                 })
-                .when('/categories/:parent_id', {
+                .when('/categories/:parentId', {
                     controller: 'Categories',
                     templateUrl: '/admin/views/controllers/categories/index.html',
                     resolve: {
@@ -57,14 +57,52 @@ define([
                             '$route',
                             'Categories',
                             function ($route, Categories) {
-                                return Categories.getList($route.current.params.parent_id);
+                                return Categories.getList($route.current.params.parentId);
                             }
                         ],
                         path: [
                             '$route',
                             'Categories',
                             function ($route, Categories) {
-                                var id = $route.current.params.parent_id;
+                                var id = $route.current.params.parentId;
+                                if (id && id !== 'null') {
+                                    return Categories.getPath(id);
+                                } else {
+                                    return null;
+                                }
+                            }
+                        ]
+                    }
+                })
+                .when('/categories/:categoryId/attributes', {
+                    controller: 'CategoryAttributes',
+                    templateUrl: '/admin/views/controllers/categories/attributes.html',
+                    resolve: {
+                        user: [
+                            '$rootScope',
+                            'User',
+                            function ($rootScope, User) {
+                                return getCurrentUser($rootScope, User);
+                            }
+                        ],
+                        content: [
+                            '$route',
+                            'Categories',
+                            function ($route, Categories) {
+                                return Categories.attributes.getList($route.current.params.categoryId);
+                            }
+                        ],
+                        vocabularies: [
+                            'Vocabularies',
+                            function (Vocabularies) {
+                                return Vocabularies.getList();
+                            }
+                        ],
+                        path: [
+                            '$route',
+                            'Categories',
+                            function ($route, Categories) {
+                                var id = $route.current.params.categoryId;
                                 if (id && id !== 'null') {
                                     return Categories.getPath(id);
                                 } else {

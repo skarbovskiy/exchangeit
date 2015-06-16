@@ -40,12 +40,6 @@ var Service = {
         return Category.update(request.body, {where: {id: id}})
             .then(function () {
                 return [200, undefined];
-            })
-            .catch(function (error) {
-                if (error.name && error.name === 'SequelizeValidationError') {
-                    throw new HttpError(400, error.message, error.errors);
-                }
-                throw error;
             });
     },
 

@@ -37,25 +37,25 @@ define([
                     minPrice: {
                         title: 'Минимальная цена товара',
                         type: 'number',
-                        depends: 'canHaveProducts'
+                        depends: {'canHaveProducts': true}
                     },
                     maxPrice: {
                         title: 'Максимальная цена товара',
                         type: 'number',
-                        depends: 'canHaveProducts'
+                        depends: {'canHaveProducts': true}
                     }
                 };
 
                 function updateList (promise) {
                     promise.then(function () {
-                        return Categories.getList($route.current.params.parent_id);
+                        return Categories.getList($route.current.params.parentId);
                     })
                         .then(function (response) {
                             $scope.Categories.list = response;
                             $scope.Core.loading = false;
                         }, function (reason) {
                             $scope.Core.loading = false;
-                            toastr.error(reason.message.error, 'Произошла ошибка');
+                            toastr.error(reason.message.error || reason.message, 'Произошла ошибка');
                         });
                 }
                 var Controller = {

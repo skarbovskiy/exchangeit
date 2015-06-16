@@ -7,13 +7,14 @@ define([
     '../core/directives/Validator',
 
     './controllers/Base',
-    './controllers/Login',
-    './controllers/Logout',
+    './controllers/auth/Login',
+    './controllers/auth/Logout',
     './controllers/Dashboard',
-    './controllers/Categories',
+    './controllers/category/Categories',
+    './controllers/category/Attributes',
+    './controllers/vocabulary/Vocabularies',
+    './controllers/vocabulary/Content',
     './controllers/Users',
-    './controllers/Vocabularies',
-    './controllers/VocabularyContent',
 
     './controllers/modals/DefaultModal',
 

@@ -5,6 +5,7 @@ var winston = require('winston');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var errors = require('./modules/core/errors');
 var bootstrapper = require('./modules/core/bootstrap');
 
 var logger = new (winston.Logger)({
@@ -51,6 +52,9 @@ bootstrapper.init({logger: logger})
         app.use(require('./routes'));
 
         app.use(function (error, request, response, next) {
+            if (error.name && error.name === 'SequelizeValidationError') {
+                error = new errors.HttpError(400, error.message, error.errors);
+            }
             if (error.status && error.json) {
                 logger.warn(
                     'application warning',

@@ -39,6 +39,28 @@ define([
                 },
                 remove: function (id) {
                     return Http.delete('/admin/categories/' + id);
+                },
+                attributes: {
+                    getList: function (categoryId) {
+                        return Http.get('/admin/categories/' + categoryId + '/attributes/');
+                    },
+                    create: function (categoryId, name, type, vocabularyId) {
+                        return Http.post('/admin/categories/' + categoryId + '/attributes/', {
+                            name: name,
+                            type: type,
+                            vocabularyId: vocabularyId
+                        });
+                    },
+                    update: function (categoryId, id, name, type, vocabularyId) {
+                        return Http.put('/admin/categories/' + categoryId + '/attributes/' + id, {
+                            name: name,
+                            type: type,
+                            vocabularyId: vocabularyId
+                        });
+                    },
+                    remove: function (categoryId, id) {
+                        return Http.delete('/admin/categories/' + categoryId + '/attributes/' + id);
+                    }
                 }
             }
         }

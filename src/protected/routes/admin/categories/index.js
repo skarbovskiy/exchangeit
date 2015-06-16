@@ -41,4 +41,6 @@ router.delete('/:id', session.checkAdmin, function (request, response, next) {
         .catch(next);
 });
 
+router.use('/', require('./attributes'));
+
 module.exports = router;

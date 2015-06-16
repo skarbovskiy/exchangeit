@@ -14,6 +14,7 @@
             <th>Мин. $</th>
             <th>Макс. $</th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -25,6 +26,9 @@
                 </td>
                 <td>{{item.minPrice || Categories.prices[item.id].min}}</td>
                 <td>{{item.maxPrice || Categories.prices[item.id].max}}</td>
+                <td style="width: 20em">
+                    <a ng-if="item.canHaveProducts" type="button" class="btn btn-primary" href="admin.html#/categories/{{item.id}}/attributes">Атрибуты товаров</a>
+                </td>
                 <td style="width: 20em">
                     <button type="button" class="btn btn-primary" ng-click="Categories.edit(item)">Редактировать</button>
                     <button type="button" class="btn btn-danger" ng-click="Categories.remove(item)">Удалить</button>

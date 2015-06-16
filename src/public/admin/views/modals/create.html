@@ -3,7 +3,7 @@
         <h3 class="modal-title">{{item.title}}</h3>
     </div>
     <div class="modal-body">
-        <div class="form-group" ng-repeat="field in item.fields" ng-hide="field.type === 'hidden' || (findDependency(field.depends) && !findDependency(field.depends).value)">
+        <div class="form-group" ng-repeat="field in item.fields" ng-hide="field.type === 'hidden' || (field.depends && !checkDependency(field.depends))">
             <label for="input-{{field.title}}" class="col-sm-2 control-label">{{field.title}}</label>
             <div class="col-sm-10" ng-switch="field.type">
                 <textarea
@@ -21,7 +21,8 @@
                         ng-model="field.value"
                         ng-required="field.required"
                 >
-                    <option ng-repeat="value in field.options">{{value}}</option>
+                    <option ng-if="typeof(field.options[0])==='string'" ng-repeat="value in field.options">{{value}}</option>
+                    <option ng-if="typeof(field.options[0])==='object'" ng-repeat="value in field.options" value="{{value.id}}">{{value.name}}</option>
                 </select>
                 <input
                         type="{{field.type}}"

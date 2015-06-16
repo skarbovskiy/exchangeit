@@ -18,14 +18,19 @@ define([
                     $modalInstance.dismiss('cancel');
                 };
 
-                $scope.findDependency = function (name) {
-                    var link = null;
+                $scope.typeof = function (type) {
+                    return typeof(type);
+                };
+
+                $scope.checkDependency = function (dependancy) {
+                    var name = _.keys(dependancy)[0];
+                    var value = false;
                     $scope.item.fields instanceof Array && $scope.item.fields.forEach(function (field) {
                         if (field.name === name) {
-                            link = field;
+                            value = field.value === dependancy[name];
                         }
                     });
-                    return link;
+                    return value;
                 };
 
                 function processDefaultValues (item) {

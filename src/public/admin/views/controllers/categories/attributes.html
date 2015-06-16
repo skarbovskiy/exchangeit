@@ -1,0 +1,33 @@
+<h3 class="page-header">
+    <button class="btn btn-default pull-right btn-info" ng-click="CategoryAttributes.create()" style="margin: 5px 5px 0 0">Добавить атрибут</button>
+    <ol class="breadcrumb">
+        <li><a href="admin.html#/categories/null">Категории</a></li>
+        <li ng-repeat="item in CategoryAttributes.path"><a href="admin.html#/categories/{{item.id}}">{{item.name}}</a></li>
+        <li><a href="admin.html#/categories/{{CategoryAttributes.category.id}}/attributes">Атрибуты</a></li>
+    </ol>
+</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Тип</th>
+            <th>Словарь</th>
+
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in CategoryAttributes.list">
+            <td>{{item.name}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.Vocabulary && item.Vocabulary.name}}</td>
+            <td style="width: 20em">
+                <button type="button" class="btn btn-primary" ng-click="CategoryAttributes.edit(item)">Редактировать</button>
+                <button type="button" class="btn btn-danger" ng-click="CategoryAttributes.remove(item)">Удалить</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="well" ng-if="CategoryAttributes.list.length === 0">атрибуты не найдены</div>

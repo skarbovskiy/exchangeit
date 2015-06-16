@@ -4,37 +4,54 @@ define([
     'use strict';
 
     admin.controller(
-        'Vocabularies',
-        ['$scope', '$modal', 'toastr', 'Vocabularies', 'list', function ($scope, $modal, toastr, Vocabularies, list) {
-            $scope.Base.setActiveMenu('vocabularies');
+        'CategoryAttributes',
+        ['$scope', '$modal', 'toastr', 'Categories', 'content', 'vocabularies', 'path', function ($scope, $modal, toastr, Categories, content, vocabularies, path) {
+            $scope.Base.setActiveMenu('categories');
 
             var fieldsList = {
                 id: {
                     type: 'hidden'
                 },
+                categoryId: {
+                    type: 'hidden'
+                },
                 name: {
                     title: 'Название',
                     type: 'text',
-                    placeholder: 'Размеры обуви',
                     required: true
+                },
+                type: {
+                    title: 'Тип',
+                    type: 'select',
+                    options: ['date', 'select'],
+                    required: true
+                },
+                vocabularyId: {
+                    title: 'Словарь',
+                    type: 'select',
+                    options: vocabularies,
+                    depends: {'type': 'select'}
                 }
             };
 
             function updateList (promise) {
                 promise.then(function () {
-                    return Vocabularies.getList();
+                    return Categories.attributes.getList(Controller.category.id);
                 })
                     .then(function (response) {
-                        $scope.Vocabularies.list = response;
+                        $scope.CategoryAttributes.list = response.CategoryAttributes;
                         $scope.Core.loading = false;
                     }, function (reason) {
                         $scope.Core.loading = false;
-                        toastr.error(reason.message.error, 'Произошла ошибка');
+                        toastr.error(reason.message.error || reason.message, 'Произошла ошибка');
                     });
             }
 
             var Controller = {
-                list: list,
+                path: path,
+                category: content,
+                vocabularies: vocabularies,
+                list: content.CategoryAttributes,
 
                 create: function () {
                     var modalInstance = $modal.open({
@@ -44,7 +61,7 @@ define([
                         resolve: {
                             item: function () {
                                 return {
-                                    title: 'Создание словаря',
+                                    title: 'Создание атрибута',
                                     fields: _.cloneDeep(fieldsList)
                                 };
                             }
@@ -54,8 +71,11 @@ define([
                     modalInstance.result.then(function (item) {
                         $scope.Core.loading = true;
                         updateList(
-                            Vocabularies.create(
-                                item.fields.name.value
+                            Categories.attributes.create(
+                                Controller.category.id,
+                                item.fields.name.value,
+                                item.fields.type.value,
+                                item.fields.vocabularyId.value
                             )
                         );
                     });
@@ -69,7 +89,7 @@ define([
                         resolve: {
                             item: function () {
                                 return {
-                                    title: 'Редактирование словаря',
+                                    title: 'Редактирование атрибута',
                                     fields: _.cloneDeep(fieldsList),
                                     values: item
                                 };
@@ -80,9 +100,12 @@ define([
                     modalInstance.result.then(function (item) {
                         $scope.Core.loading = true;
                         updateList(
-                            Vocabularies.update(
+                            Categories.attributes.update(
+                                item.fields.categoryId.value,
                                 item.fields.id.value,
-                                item.fields.name.value
+                                item.fields.name.value,
+                                item.fields.type.value,
+                                item.fields.vocabularyId.value
                             )
                         );
                     });
@@ -103,15 +126,16 @@ define([
                     modalInstance.result.then(function (item) {
                         $scope.Core.loading = true;
                         updateList(
-                            Vocabularies.remove(
+                            Categories.attributes.remove(
+                                Controller.category.id,
                                 item.id
                             )
                         );
                     });
                 }
-            }
+            };
 
-            $scope.Vocabularies = Controller;
+            $scope.CategoryAttributes = Controller;
         }]
     );
 });

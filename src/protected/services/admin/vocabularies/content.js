@@ -11,6 +11,9 @@ var Service = {
         return Vocabulary.findOne(
             {where: {id: vocabularyId}, row: true, include: [VocabularyContent]}
         ).then(function (data) {
+            if (!data) {
+                throw new HttpError(404, 'no vocabulary found');
+            }
             return [200, data];
         });
     },

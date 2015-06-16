@@ -25,7 +25,7 @@ var CategoryAttribute = orm.define('CategoryAttribute', {
         },
         unique: 'categoryAttribute'
     },
-    type: {
+    type: { //date, select
         type: Sequelize.TEXT,
         allowNull: false,
         validate: {
@@ -37,6 +37,13 @@ var CategoryAttribute = orm.define('CategoryAttribute', {
         field: 'vocabulary_id'
     }
 }, {
+    validate: {
+        selectVocabulary: function () {
+            if (this.type === 'select' && !this.vocabularyId) {
+                throw new Error('select type require vocabulary');
+            }
+        }
+    },
     underscored: true,
     timestamps: true,
     freezeTableName: true,
