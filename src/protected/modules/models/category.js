@@ -12,13 +12,14 @@ var Category = orm.define('Category', {
     },
     name: {
         type: Sequelize.TEXT,
-        unique: true,
+        unique: 'uniquePerParent',
         allowNull: false,
         validate: {
             notEmpty: true
         }
     },
     parentId: {
+        unique: 'uniquePerParent',
         type: Sequelize.INTEGER,
         field: 'parent_id'
     },
