@@ -13,14 +13,16 @@ var VocabularyContent = orm.define('VocabularyContent', {
         allowNull: false,
         validate: {
             notEmpty: true
-        }
+        },
+        unique: 'vocabularyValue'
     },
     value: {
         type: Sequelize.TEXT,
         allowNull: false,
         validate: {
             notEmpty: true
-        }
+        },
+        unique: 'vocabularyValue'
     }
 }, {
     underscored: true,
