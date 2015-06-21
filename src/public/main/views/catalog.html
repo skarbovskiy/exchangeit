@@ -1,0 +1,99 @@
+<div layout="row" md-swipe-right="toggleSidenav()" md-swipe-left="toggleSidenav()">
+    <md-sidenav md-is-locked-open="$mdMedia('gt-lg')" class="md-sidenav-left" md-component-id="left">
+        <md-toolbar class="filters-toolbar" layout-align="center center">
+            <div class="md-toolbar-tools" layout-align="center center">
+                <h3>Фильтры</h3>
+            </div>
+        </md-toolbar>
+        <md-divider></md-divider>
+        <div class="md-whiteframe-z1" layout="row">
+            <md-button flex class="md-primary md-hue-1">Детское оружие</md-button>
+        </div>
+        <div class="md-whiteframe-z1" layout="row">
+            <md-content flex style="height: 262px">
+                <md-subheader><a href="#">Радиоуправляемые игрушки</a></md-subheader>
+                <md-list>
+                    <md-list-item ng-repeat="message in [{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'}]">
+                        <md-checkbox ng-model="message.selected"></md-checkbox>
+                        <p>{{message.title}}</p>
+                </md-list>
+            </md-content>
+        </div>
+        <div class="md-whiteframe-z1" layout="row">
+            <md-button flex class="md-primary md-hue-1">Демисезонная обувь</md-button>
+        </div>
+        <div class="md-whiteframe-z1" layout="row">
+            <md-button flex class="md-primary md-hue-1">Колготки, носки, нижнее белье, одежда для сна</md-button>
+        </div>
+        <div class="md-whiteframe-z1" layout="row">
+            <md-button flex class="md-primary md-hue-1">Детское оружие</md-button>
+        </div>
+    </md-sidenav>
+    <div class="content" flex>
+        <md-toolbar>
+            <div layout="column" layout-gt-sm="row" class="top-filters">
+                <md-button flex ng-class="{active: !!active1}" ng-click="active1 = !active1;">
+                    <span class="md-inline-list-icon-label">Для мальчиков</span>
+                </md-button>
+                <md-button flex ng-class="{active: !!active2}" ng-click="active2 = !active2;">
+                    <span class="md-inline-list-icon-label">Для девочек</span>
+                </md-button>
+                <md-button flex ng-class="{active: !!active3}" ng-click="active3 = !active3;">
+                    <span class="md-inline-list-icon-label">Одежда</span>
+                </md-button>
+                <md-button flex ng-class="{active: !!active4}" ng-click="active4 = !active4;">
+                    <span class="md-inline-list-icon-label">Обувь</span>
+                </md-button>
+                <md-button flex ng-class="{active: !!active5}" ng-click="active5 = !active5;">
+                    <span class="md-inline-list-icon-label">Игрушки</span>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <div layout="column" layout-gt-md="row" class="select-filters">
+            <div layout="row" flex="50" layout-align="center center">
+                <span class="md-title">Размер с: </span>
+                <md-select ng-model="someModel" placeholder="--">
+                    <md-option ng-value="opt" ng-repeat="opt in [10,11,12,13,14,15,16]">{{ opt }}</md-option>
+                </md-select>
+                <span class="md-title"> по: </span>
+                <md-select ng-model="someModel" placeholder="--">
+                    <md-option ng-value="opt" ng-repeat="opt in [10,11,12,13,14,15,16]">{{ opt }}</md-option>
+                </md-select>
+            </div>
+            <div layout="row" flex="50" layout-align="center center">
+                <span class="md-title">Состояние от: </span>
+                <md-select ng-model="someModel" placeholder="--">
+                    <md-option ng-value="opt" ng-repeat="opt in ['новое', 'Колготки, носки, нижнее белье, одежда для сна', 'б\у']">{{ opt }}</md-option>
+                </md-select>
+                <span class="md-title"> до: </span>
+                <md-select ng-model="someModel" placeholder="--">
+                    <md-option ng-value="opt" ng-repeat="opt in ['новое', 'модное', 'б\у']">{{ opt }}</md-option>
+                </md-select>
+            </div>
+        </div>
+        <md-divider></md-divider>
+        <md-content  layout="row" layout-wrap class="catalog">
+            <div flex="25" flex-sm="100" flex-md="50" flex-lg="33" ng-repeat="item in [1,2,3,4,5,6,7]">
+                <md-card>
+                    <img src="/main/img/item.jpg" class="md-card-image" alt="image caption">
+                    <md-card-header>
+                        Колготки, носки, нижнее белье, одежда для сна)
+                    </md-card-header>
+                    <md-card-footer layout="column" flex>
+                        <div layout="row" flex>
+                            <div flex layout-align="end start" layout="column">
+                                <div class="item-details"><span>Размер:</span> 27</div>
+                                <div class="item-details"><span>Состояние:</span> Колготки, носки, нижнее белье, одежда для сна</div>
+                            </div>
+                            <div layout="column" layout-align="end end">
+                                <span class="md-headline">259</span>
+                                <span style="font-size: 10px;">баллов</span>
+                            </div>
+                        </div>
+                        <md-button class="md-raised md-primary md-hue-1">В корзину</md-button>
+                    </md-card-footer>
+                </md-card>
+            </div>
+        </md-content>
+    </div>
+</div>

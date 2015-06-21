@@ -1,10 +1,12 @@
 require.config({
     deps: ['bootstrap'],
     paths: {
-        'jquery': '../lib/jquery/dist/jquery.min',
-        'angular': '../lib/angular/angular.min',
+        'jquery': '../lib/jquery/jquery.min',
+        'angular': '../lib/angular/angular',
+        'angularAria': '../lib/angular-aria/angular-aria.min',
+        'angularAnimate': '../lib/angular-animate/angular-animate.min',
         'angularRoute': '../lib/angular-route/angular-route.min',
-        'angularUIBootstrap': '../lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.12.1.min',
+        'angularMaterial': '../lib/angular-material/angular-material.min',
         'lodash': '../lib/lodash/index'
     },
     shim: {
@@ -20,7 +22,13 @@ require.config({
         'angularRoute': {
             deps: ['angular']
         },
-        'angularUIBootstrap': {
+        'angularAria': {
+            deps: ['angular']
+        },
+        'angularAnimate': {
+            deps: ['angular']
+        },
+        'angularMaterial': {
             deps: ['angular']
         }
     },

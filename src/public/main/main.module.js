@@ -5,6 +5,11 @@ define([
         .config(['$locationProvider', function ($locationProvider) {
             $locationProvider.html5Mode(true).hashPrefix('!');
         }])
+        .config(['$mdThemingProvider', function($mdThemingProvider) {
+            $mdThemingProvider.theme('default')
+                .primaryPalette('deep-purple')
+                //.accentPalette('orange');
+        }])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
@@ -15,3 +20,10 @@ define([
 
     return main;
 });
+
+/*teal
+ brown
+ purple
+ deep-purple
+ indigo
+*/

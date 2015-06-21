@@ -1,0 +1,78 @@
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 60;
+    background-color: rgba(255,255,255,0.4);
+}
+md-sidenav {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.12);
+}
+md-toolbar.filters-toolbar {
+    height: 139px;
+}
+.top-filters {
+    font-weight: 400;
+    padding: 0 16px;
+    min-height: 64px;
+}
+.select-filters .md-title {
+    padding: 24px 2px 26px;
+    color: rgba(0, 0, 0, 0.54);
+}
+.select-filters md-select {
+    padding: 20px 7px 24px;
+    font-size: 18px;
+}
+md-sidenav .md-whiteframe-z1 {
+    margin: 0 0 5px;
+    position: relative;
+}
+button.active {
+    background-color: rgba(158,158,158,0.2);
+}
+md-sidenav .md-subheader a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+md-sidenav .md-subheader:not(.md-sticky-no-effect)[sticky-state="active"] {
+    margin-top: 0;
+}
+
+md-sidenav .md-sticky-clone[sticky-state="active"]:not(.md-sticky-no-effect) .md-subheader-inner {
+    -webkit-animation: none 0;
+    animation: none 0;
+}
+md-sidenav .md-subheader:not(.md-sticky-no-effect):not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {
+    -webkit-animation: none 0 ;
+    animation: none 0;
+}
+
+md-sidenav md-list-item, md-sidenav md-list-item .md-list-item-inner{
+    min-height: 40px;
+}
+.green {
+    background: green;
+}
+
+.catalog md-card md-card-footer{
+    height: 134px;
+}
+.item-details span{
+    /*padding-left: 10px;*/
+    color: rgba(0, 0, 0, 0.54);
+}
+
+md-progress-linear:not([md-mode="indeterminate"]) .md-container {
+    top: 0;
+}
+
+md-progress-linear:not([md-mode="indeterminate"]) {
+    position: absolute;
+    z-index: 61;
+}

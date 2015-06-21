@@ -6,7 +6,7 @@ require.config({
         'angularAnimate': '../lib/angular-animate/angular-animate.min',
         'angularToaster': '../lib/angular-toastr/angular-toastr.tpls.min',
         'angularRoute': '../lib/angular-route/angular-route.min',
-        'angularUIBootstrap': '../lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.12.1.min',
+        'angularUIBootstrap': '../lib/angular-ui-bootstrap/ui-bootstrap-tpls-0.13.0.min',
         'lodash': '../lib/lodash/index'
     },
     shim: {
