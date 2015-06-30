@@ -3,12 +3,14 @@ define([
 ], function (main) {
     'use strict';
 
-    main.controller('Catalog', ['$scope', '$mdSidenav', '$timeout', function ($scope, $mdSidenav, $timeout) {
-        console.log('catalog loaded');
+    main.controller('Catalog', ['$scope', '$mdSidenav', function ($scope, $mdSidenav) {
         var Catalog = {};
-        $scope.toggleSidenav = function () {
-            $mdSidenav('left').toggle();
-        }
+        $scope.openSideNav = function () {
+            $mdSidenav('left').open();
+        };
+        $scope.closeSideNav = function () {
+            $mdSidenav('left').close();
+        };
         $scope.Catalog = Catalog;
     }]);
 });

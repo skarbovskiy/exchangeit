@@ -12,6 +12,7 @@
 </head>
 <body ng-controller="Core" ng-cloak> <!--layout-align="center center"-->
 <div ng-controller="Base"><!-- style="width: 1260px" -->
+    <md-backdrop class="md-opaque" ng-show="Base.loading"></md-backdrop>
     <md-progress-linear md-mode="buffer" value="{{Base.loadingProcess}}" md-buffer-value="{{Base.loadingSubProcess}}" class="md-accent" ng-show="Base.loading"></md-progress-linear>
     <md-toolbar class="md-medium-tall" layout="column" layout-align="center center">
         <div class="md-toolbar-tools">
@@ -22,7 +23,7 @@
 
             <span flex></span>
             <!--<md-button>Зарегистрироваться</md-button>-->
-            <md-button>Войти</md-button>
+            <md-button ng-click="Base.login()">Войти</md-button>
             <md-button class="md-raised" ng-click="Base.setLoader()">
                 <md-icon ng-style="{color: '#000'}" md-svg-src="/lib/material-design-icons/action/svg/production/ic_shopping_cart_24px.svg"></md-icon>
                 <span class="md-inline-list-icon-label">Корзина (<span>0</span>)</span>
@@ -31,7 +32,6 @@
     </md-toolbar>
     <!--<div layout="column" style="background-color: #2c788c; max-height: 90px;" flex layout-align="center center"><div flex layout-align="center center"><img style="padding:0; margin:0 border:0" src="/main/img/ad.gif"/></div></div>-->
     <div class="content" ng-view></div>
-    <div class="overlay" ng-show="Base.loading"></div>
 </div>
 <script src="/lib/requirejs/require.js" data-main="main/config.js"></script>
 </body>

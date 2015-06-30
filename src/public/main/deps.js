@@ -1,8 +1,14 @@
 define([
     '../core/core.module',
-    '../core/controllers/Core',
     '../core/services/Http',
+    '../core/services/User',
+    '../core/services/Session',
+    '../core/controllers/Core',
+    '../core/directives/Validator',
+
 
     './controllers/Base',
-    './controllers/Catalog'
+    './controllers/Catalog',
+
+    './controllers/user/Login'
 ], function () {});

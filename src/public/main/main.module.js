@@ -5,16 +5,23 @@ define([
         .config(['$locationProvider', function ($locationProvider) {
             $locationProvider.html5Mode(true).hashPrefix('!');
         }])
-        .config(['$mdThemingProvider', function($mdThemingProvider) {
+        .config(['$mdThemingProvider', function ($mdThemingProvider) {
             $mdThemingProvider.theme('default')
-                .primaryPalette('deep-purple')
-                //.accentPalette('orange');
+                .primaryPalette('deep-purple');
         }])
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
                     controller: 'Catalog',
-                    templateUrl: '/main/views/catalog.html'
+                    templateUrl: '/main/views/catalog.html',
+                    resolve: {
+                        token: [
+                            'Session',
+                            function (Session) {
+                                return Session.getToken();
+                            }
+                        ]
+                    }
                 })
         }]);
 
