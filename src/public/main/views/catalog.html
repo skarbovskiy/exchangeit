@@ -1,51 +1,45 @@
-<div layout="row" md-swipe-right="openSideNav()" md-swipe-left="closeSideNav()">
+<div layout="row" md-swipe-right="Catalog.openSideNav()" md-swipe-left="Catalog.closeSideNav()">
     <md-sidenav md-is-locked-open="$mdMedia('gt-lg')" class="md-sidenav-left" md-component-id="left">
         <md-toolbar class="filters-toolbar" layout-align="center center">
             <div class="md-toolbar-tools" layout-align="center center">
                 <h3>Фильтры</h3>
             </div>
         </md-toolbar>
+        <md-button class="md-primary md-hue-1 remove-filters" ng-if="hasKeys(Catalog.selectedCategories)" ng-click="Catalog.selectedCategories = {}">Сбросить все</md-button>
         <md-divider></md-divider>
-        <div class="md-whiteframe-z1" layout="row">
-            <md-button flex class="md-primary md-hue-1">Детское оружие</md-button>
-        </div>
-        <div class="md-whiteframe-z1" layout="row">
-            <md-content flex style="height: 262px">
-                <md-subheader><a href="#">Радиоуправляемые игрушки</a></md-subheader>
-                <md-list>
-                    <md-list-item ng-repeat="message in [{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'},{title: 'Пушки'}, {title: 'Пистолеты'}]">
-                        <md-checkbox ng-model="message.selected"></md-checkbox>
-                        <p>{{message.title}}</p>
-                </md-list>
-            </md-content>
-        </div>
-        <div class="md-whiteframe-z1" layout="row">
-            <md-button flex class="md-primary md-hue-1">Демисезонная обувь</md-button>
-        </div>
-        <div class="md-whiteframe-z1" layout="row">
-            <md-button flex class="md-primary md-hue-1">Колготки, носки, нижнее белье, одежда для сна</md-button>
-        </div>
-        <div class="md-whiteframe-z1" layout="row">
-            <md-button flex class="md-primary md-hue-1">Детское оружие</md-button>
+        <div ng-repeat="topLevelCategory in Catalog.categories">
+            <div class="md-whiteframe-z1" layout="row" ng-repeat="category in topLevelCategory.children">
+                <md-button
+                        flex class="md-primary md-hue-1"
+                        ng-click="Catalog.selectedCategories[category.id] = !Catalog.selectedCategories[category.id]; !category.children && Catalog.updateCategories()"
+                        ng-class="{active: Catalog.selectedCategories[category.id]}"
+                        ng-if="!category.children || !Catalog.selectedCategories[category.id]"
+                        >{{category.name}}</md-button>
+                <md-content flex style="max-height: 262px"  ng-if="category.children && Catalog.selectedCategories[category.id]">
+                    <md-subheader>
+                        <div layout="row">
+                            <a href="#" ng-click="Catalog.selectedCategories[category.id] = !Catalog.selectedCategories[category.id]">{{category.name}}</a>
+                            <span flex></span>
+                            <a class="all" href="#" ng-click="Catalog.toggleSubCategories(category.children); Catalog.updateCategories()">(все)</a>
+                        </div>
+                    </md-subheader>
+                    <md-list>
+                        <md-list-item ng-repeat="subcategory in category.children">
+                            <md-checkbox
+                                    ng-model="Catalog.selectedCategories[subcategory.id]"
+                                    ng-click="Catalog.updateCategories()"
+                                    ></md-checkbox>
+                            <p>{{subcategory.name}}</p>
+                    </md-list>
+                </md-content>
+            </div>
         </div>
     </md-sidenav>
     <div class="content" flex>
         <md-toolbar>
             <div layout="column" layout-gt-sm="row" class="top-filters">
-                <md-button flex ng-class="{active: !!active1}" ng-click="active1 = !active1;">
-                    <span class="md-inline-list-icon-label">Для мальчиков</span>
-                </md-button>
-                <md-button flex ng-class="{active: !!active2}" ng-click="active2 = !active2;">
-                    <span class="md-inline-list-icon-label">Для девочек</span>
-                </md-button>
-                <md-button flex ng-class="{active: !!active3}" ng-click="active3 = !active3;">
-                    <span class="md-inline-list-icon-label">Одежда</span>
-                </md-button>
-                <md-button flex ng-class="{active: !!active4}" ng-click="active4 = !active4;">
-                    <span class="md-inline-list-icon-label">Обувь</span>
-                </md-button>
-                <md-button flex ng-class="{active: !!active5}" ng-click="active5 = !active5;">
-                    <span class="md-inline-list-icon-label">Игрушки</span>
+                <md-button flex ng-class="{active: filter.selected}" ng-repeat="filter in Catalog.topFilters" ng-click="filter.selected = !filter.selected; Catalog.updateCategories()">
+                    <span class="md-inline-list-icon-label">{{filter.name}}</span>
                 </md-button>
             </div>
         </md-toolbar>

@@ -10,5 +10,7 @@ define([
     './controllers/Base',
     './controllers/Catalog',
 
-    './controllers/user/Login'
+    './controllers/user/Login',
+
+    './services/Categories'
 ], function () {});

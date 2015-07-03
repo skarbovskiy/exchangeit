@@ -27,12 +27,12 @@ var initTasks = {
     orm: function () {
         return new Promise(function (resolve) {
             var orm = new Sequelize(config.pg.database, config.pg.username, config.pg.password, {
-                host: process.env.PPOSTGRES_PORT_5432_TCP_ADDR || config.pg.host,
-                port: process.env.POSTGRES_PORT_5432_TCP_PORT || '5432',
+                host: config.pg.host,
+                port: '5432',
                 dialect: 'postgres',
                 pool: {
                     max: 5,
-                    min: 0,
+                    min: 1,
                     idle: 10000
                 }
             });
@@ -42,8 +42,8 @@ var initTasks = {
     redis: function () {
         return new Promise(function (resolve) {
             var connection = redis.createClient(
-                process.env.REDIS_PORT_6379_TCP_PORT || config.redis.port,
-                process.env.REDIS_PORT_6379_TCP_ADDR || config.redis.host,
+                config.redis.port,
+                config.redis.host,
                 config.redis.options
             );
 

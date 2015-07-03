@@ -14,11 +14,16 @@ define([
                 .when('/', {
                     controller: 'Catalog',
                     templateUrl: '/main/views/catalog.html',
+                    reloadOnSearch: false,
                     resolve: {
-                        token: [
-                            'Session',
-                            function (Session) {
-                                return Session.getToken();
+                        categories: [
+                            '$location', 'Session', 'Categories',
+                            function ($location, Session, Categories) {
+                                var filters = $location.search();
+                                var routeFilters = JSON.parse(filters.topFilters || '{}');
+                                return Session.getToken().then(function () {
+                                    return Categories.getList(routeFilters.category, routeFilters.attribute);
+                                });
                             }
                         ]
                     }

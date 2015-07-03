@@ -16,18 +16,23 @@ define([
                     loading: false,
                     loadingProcess: 0,
                     loadingSubProcess: 0,
+                    loadingHandler: null,
                     setLoader: function () {
                         $scope.Base.loadingProcess = 0;
                         $scope.Base.loadingSubProcess = 0;
                         $scope.Base.loading = true;
-                        var intervalHandler = $interval(function () {
+                        $scope.Base.loadingHandler = $interval(function () {
+                            if ($scope.Base.loadingProcess >= 100) {
+                                $scope.Base.loadingProcess = 0;
+                                $scope.Base.loadingSubProcess = 0;
+                            }
                             $scope.Base.loadingProcess += 2;
                             $scope.Base.loadingSubProcess += 4;
                         }, 50, 0, true);
-                        $timeout(function () {
-                            $scope.Base.loading = 0;
-                            $interval.cancel(intervalHandler);
-                        }, 3000);
+                    },
+                    removeLoader: function () {
+                        $scope.Base.loading = false;
+                        $interval.cancel($scope.Base.loadingHandler);
                     },
                     login: function (event) {
                         $mdDialog.show({

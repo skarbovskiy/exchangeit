@@ -2,19 +2,20 @@
 var express = require('express');
 var path = require('path');
 var winston = require('winston');
+var LogstashUDP = require('winston-logstash-udp').LogstashUDP;
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var errors = require('./modules/core/errors');
 var bootstrapper = require('./modules/core/bootstrap');
-
 var logger = new (winston.Logger)({
     transports: [
-        //new LogstashUDP({
-        //    port: config.port,
-        //    appName: config.appName,
-        //    host: config.host
-        //}),
+        new LogstashUDP({
+            port: '9999',
+            appName: 'exchangeit',
+            host: 'cookiteasy.ru',
+            handleExceptions: true
+        }),
         new winston.transports.Console({
             colorize: true,
             handleExceptions: true
@@ -99,7 +100,10 @@ bootstrapper.init({logger: logger})
     .catch(function (error) {
         return logger.error(
             'error while bootstrapping application',
-            {message: error.message || JSON.stringify(error), stack: error.stack}
+            {message: error.message || JSON.stringify(error), stack: error.stack},
+            function () {
+                process.exit(1);
+            }
         );
     })
 
