@@ -23,7 +23,8 @@
 
             <span flex></span>
             <!--<md-button>Зарегистрироваться</md-button>-->
-            <md-button ng-click="Base.login()">Войти</md-button>
+            <md-button ng-if="!Base.currentUser" ng-click="Base.login()">Войти</md-button>
+            <md-button ng-if="Base.currentUser" ng-click="">Профиль ({{Base.currentUser.firstName}} {{Base.currentUser.lastName}})</md-button>
             <md-button class="md-raised" ng-click="Base.setLoader()">
                 <md-icon ng-style="{color: '#000'}" md-svg-src="/lib/material-design-icons/action/svg/production/ic_shopping_cart_24px.svg"></md-icon>
                 <span class="md-inline-list-icon-label">Корзина (<span>0</span>)</span>

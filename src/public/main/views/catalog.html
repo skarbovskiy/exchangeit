@@ -5,7 +5,7 @@
                 <h3>Фильтры</h3>
             </div>
         </md-toolbar>
-        <md-button class="md-primary md-hue-1 remove-filters" ng-if="hasKeys(Catalog.selectedCategories)" ng-click="Catalog.selectedCategories = {}">Сбросить все</md-button>
+        <md-button class="md-primary md-hue-1 remove-filters" ng-if="hasKeys(Catalog.selectedCategories)" ng-click="Catalog.selectedCategories = {}; Catalog.updateCategories();">Сбросить все</md-button>
         <md-divider></md-divider>
         <div ng-repeat="topLevelCategory in Catalog.categories">
             <div class="md-whiteframe-z1" layout="row" ng-repeat="category in topLevelCategory.children">

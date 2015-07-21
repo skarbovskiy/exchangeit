@@ -13,19 +13,16 @@ define([
                     return;
                 }
                 $scope.Login.loading = true;
-                User.login('+380' + $scope.Login.phone, $scope.Login.password)
-                    .then(function () {
+                User.login('+38' + $scope.Login.phone, $scope.Login.password)
+                    .then(function (response) {
                         $scope.Login.loading = false;
-                        $mdDialog.hide();
+                        $mdDialog.hide(response);
                     })
                     .catch(function (e) {
                         var toast = $mdToast.simple()
-                            .content('Пользователь не найден')
-                            .position('center fit');
+                            .content('Пользователь не найден');
                         $mdToast.show(toast);
-                    })
-                    .finally(function () {
-                        $mdDialog.hide();
+                        $mdDialog.cancel();
                     });
 
             }

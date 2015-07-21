@@ -6,7 +6,7 @@
         </div>
         <div ng-show="!Login.loading">
             <md-input-container>
-                <label>Телефон (без +380)</label>
+                <label>Телефон (без +38)</label>
                 <input ng-model="Login.phone" type="text" name="phone" id="phone-input" phone required/>
                 <div ng-messages="loginForm.phone.$dirty && loginForm.phone.$touched &&loginForm.phone.$error">
                     <div ng-message="required">Поле обязательно к заполнению</div>

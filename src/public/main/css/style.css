@@ -1,3 +1,6 @@
+body[ng-cloak] {
+    display: none;
+}
 md-sidenav {
     border-right-style: solid;
     border-right-width: 1px;

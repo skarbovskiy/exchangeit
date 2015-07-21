@@ -18,7 +18,8 @@ require.config({
             exports: '_'
         },
         'angular' : {
-            'exports' : 'angular'
+            deps: ['jquery'],
+            exports : 'angular'
         },
         'angularRoute': {
             deps: ['angular']

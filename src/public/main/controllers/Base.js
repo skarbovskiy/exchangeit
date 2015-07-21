@@ -10,14 +10,10 @@ define([
             '$timeout',
             '$scope',
             '$interval',
-            '$mdDialog','$mdToast',
+            '$mdDialog',
+            '$route',
             'User',
-            function ($rootScope, $timeout, $scope, $interval, $mdDialog,$mdToast,  User) {
-                var toast = $mdToast.simple()
-                    .content('Пользователь не найден')
-                    .hideDelay(0)
-                    .position('bottom left top right');
-                $mdToast.show(toast);
+            function ($rootScope, $timeout, $scope, $interval, $mdDialog, $route,  User) {
                 $scope.Base = {
                     currentUser: null,
                     loading: false,
@@ -50,10 +46,9 @@ define([
                             parent: angular.element(document.body),
                             targetEvent: event
                         })
-                            .then(function (answer) {
-                                $scope.alert = 'You said the information was "' + answer + '".';
-                            }, function () {
-                                $scope.alert = 'You cancelled the dialog.';
+                            .then(function (response) {
+                                $scope.Base.currentUser = response;
+                                $route.reload();
                             });
                     }
                 };
