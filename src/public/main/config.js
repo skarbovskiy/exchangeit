@@ -8,6 +8,7 @@ require.config({
         'angularRoute': '../lib/angular-route/angular-route.min',
         'angularMessages': '../lib/angular-messages/angular-messages.min',
         'angularMaterial': '../lib/angular-material/angular-material.min',
+        'angularSEO': '../lib/angular-seo/angular-seo',
         'lodash': '../lib/lodash/index'
     },
     shim: {
@@ -34,6 +35,9 @@ require.config({
             deps: ['angular']
         },
         'angularMaterial': {
+            deps: ['angular']
+        },
+        'angularSEO': {
             deps: ['angular']
         }
     },

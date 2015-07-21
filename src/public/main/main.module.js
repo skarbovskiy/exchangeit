@@ -1,9 +1,9 @@
 define([
     'angular'
 ], function (angular) {
-    var main = angular.module('main', ['ngRoute', 'ngMaterial', 'ngMessages', 'core'])
+    var main = angular.module('main', ['ngRoute', 'ngMaterial', 'ngMessages', 'seo', 'core'])
         .config(['$locationProvider', function ($locationProvider) {
-            $locationProvider.html5Mode(true).hashPrefix('!');
+            $locationProvider.hashPrefix('!');
         }])
         .config(['$mdThemingProvider', function ($mdThemingProvider) {
             $mdThemingProvider.theme('default')

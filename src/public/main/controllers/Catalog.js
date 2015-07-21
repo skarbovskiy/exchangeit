@@ -122,6 +122,7 @@ define([
                         $scope.Catalog.selectedCategories = JSON.parse(search.sideFilters);
                     } catch (e) {}
                 }
+                $scope.htmlReady();
             }
         ]
     );

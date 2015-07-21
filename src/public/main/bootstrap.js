@@ -6,6 +6,7 @@ requirejs([
     'angularAria',
     'angularMaterial',
     'angularMessages',
+    'angularSEO',
     'lodash',
     'main.module',
     'deps'
