@@ -35,6 +35,13 @@ var User = orm.define('User', {
         validate: {
             isEmail: true
         }
+    },
+    salt: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     }
 }, {
     underscored: true,

@@ -9,5 +9,6 @@ router.use('/admin/categories', require('./admin/categories'));
 router.use('/admin/vocabularies', require('./admin/vocabularies'));
 
 router.use('/categories', require('./main/categories'));
+router.use('/profile', require('./main/profile'));
 
 module.exports = router;

@@ -11,9 +11,10 @@ define([
             '$scope',
             '$interval',
             '$mdDialog',
+            '$mdToast',
             '$route',
             'User',
-            function ($rootScope, $timeout, $scope, $interval, $mdDialog, $route,  User) {
+            function ($rootScope, $timeout, $scope, $interval, $mdDialog, $mdToast, $route,  User) {
                 $scope.Base = {
                     currentUser: null,
                     loading: false,
@@ -46,9 +47,15 @@ define([
                             parent: angular.element(document.body),
                             targetEvent: event
                         })
+                            .then(User.getCurrentUser)
                             .then(function (response) {
                                 $scope.Base.currentUser = response;
                                 $route.reload();
+                            })
+                            .catch(function () {
+                                var toast = $mdToast.simple()
+                                    .content('Пользователь не найден');
+                                $mdToast.show(toast);
                             });
                     }
                 };

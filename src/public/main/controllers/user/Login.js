@@ -3,7 +3,7 @@ define([
 ], function (main) {
     'use strict';
 
-    main.controller('Login', ['$scope', '$mdDialog', '$mdToast', '$timeout', 'User', function ($scope, $mdDialog, $mdToast, $timeout, User) {
+    main.controller('Login', ['$scope', '$mdDialog', '$timeout', 'User', function ($scope, $mdDialog, $timeout, User) {
         $scope.Login = {
             loading: false,
             phone: null,
@@ -19,10 +19,7 @@ define([
                         $mdDialog.hide(response);
                     })
                     .catch(function (e) {
-                        var toast = $mdToast.simple()
-                            .content('Пользователь не найден');
-                        $mdToast.show(toast);
-                        $mdDialog.cancel();
+                        $mdDialog.cancel(e);
                     });
 
             }

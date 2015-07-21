@@ -6,6 +6,9 @@ var Service = {
         md5sum.update(string);
         return md5sum.digest('hex');
     },
+    hashPassword: function (password, salt) {
+        return Service.md5(password + salt);
+    },
     cleanDataForResponse: function (userData) {
         if (!userData) {
             return userData;

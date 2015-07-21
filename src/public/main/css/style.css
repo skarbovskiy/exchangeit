@@ -1,6 +1,9 @@
 body[ng-cloak] {
     display: none;
 }
+md-backdrop.md-opaque {
+    background-color: rgba(0,0,0,0.30);
+}
 md-sidenav {
     border-right-style: solid;
     border-right-width: 1px;
