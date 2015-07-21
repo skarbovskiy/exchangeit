@@ -5,6 +5,7 @@ requirejs([
     'angularAnimate',
     'angularAria',
     'angularMaterial',
+    'angularMessages',
     'lodash',
     'main.module',
     'deps'

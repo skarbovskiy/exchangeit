@@ -1,5 +1,34 @@
 <md-dialog>
+    <form name="loginForm" ng-submit="loginForm.$valid && Login.submit()">
     <md-dialog-content>
-        
+        <div layout="row" layout-align="space-around" ng-if="Login.loading">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+        <div ng-show="!Login.loading">
+            <md-input-container>
+                <label>Телефон (без +380)</label>
+                <input ng-model="Login.phone" type="text" name="phone" id="phone-input" phone required/>
+                <div ng-messages="loginForm.phone.$dirty && loginForm.phone.$touched &&loginForm.phone.$error">
+                    <div ng-message="required">Поле обязательно к заполнению</div>
+                    <div ng-message="phone">Неверный формат телефона</div>
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>Пароль</label>
+                <input ng-model="Login.password" type="password" name="password" required>
+                <div ng-messages="loginForm.password.$dirty && loginForm.password.$touched &&loginForm.password.$error">
+                    <div ng-message="required">Поле обязательно к заполнению</div>
+                </div>
+            </md-input-container>
+        </div>
     </md-dialog-content>
+    <div class="md-actions" ng-show="!Login.loading">
+        <a class="md-button" href="#" ng-click="answer('not useful')">
+            Зарегистрироваться
+        </a>
+        <md-button class="md-primary">
+            Войти
+        </md-button>
+    </div>
+    </form>
 </md-dialog>

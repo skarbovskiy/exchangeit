@@ -1,7 +1,7 @@
 define([
     'angular'
 ], function (angular) {
-    var main = angular.module('main', ['ngRoute', 'ngMaterial', 'core'])
+    var main = angular.module('main', ['ngRoute', 'ngMaterial', 'ngMessages', 'core'])
         .config(['$locationProvider', function ($locationProvider) {
             $locationProvider.html5Mode(true).hashPrefix('!');
         }])

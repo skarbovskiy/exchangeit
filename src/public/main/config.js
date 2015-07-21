@@ -6,6 +6,7 @@ require.config({
         'angularAria': '../lib/angular-aria/angular-aria.min',
         'angularAnimate': '../lib/angular-animate/angular-animate.min',
         'angularRoute': '../lib/angular-route/angular-route.min',
+        'angularMessages': '../lib/angular-messages/angular-messages.min',
         'angularMaterial': '../lib/angular-material/angular-material.min',
         'lodash': '../lib/lodash/index'
     },
@@ -26,6 +27,9 @@ require.config({
             deps: ['angular']
         },
         'angularAnimate': {
+            deps: ['angular']
+        },
+        'angularMessages': {
             deps: ['angular']
         },
         'angularMaterial': {

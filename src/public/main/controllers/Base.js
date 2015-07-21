@@ -9,10 +9,17 @@ define([
             '$rootScope',
             '$timeout',
             '$scope',
-            '$interval'
-            , '$mdDialog',
-            function ($rootScope, $timeout, $scope, $interval, $mdDialog) {
-                var Controller  = {
+            '$interval',
+            '$mdDialog','$mdToast',
+            'User',
+            function ($rootScope, $timeout, $scope, $interval, $mdDialog,$mdToast,  User) {
+                var toast = $mdToast.simple()
+                    .content('Пользователь не найден')
+                    .hideDelay(0)
+                    .position('bottom left top right');
+                $mdToast.show(toast);
+                $scope.Base = {
+                    currentUser: null,
                     loading: false,
                     loadingProcess: 0,
                     loadingSubProcess: 0,
@@ -36,6 +43,8 @@ define([
                     },
                     login: function (event) {
                         $mdDialog.show({
+                            clickOutsideToClose: true,
+                            focusOnOpen: false,
                             controller: 'Login',
                             templateUrl: '/main/views/user/loginModal.html',
                             parent: angular.element(document.body),
@@ -48,7 +57,13 @@ define([
                             });
                     }
                 };
-                $scope.Base = Controller;
+
+                $scope.Base.setLoader();
+                User.getCurrentUser().then(function (response) {
+                    $scope.Base.currentUser = response;
+                }).finally(function () {
+                    $scope.Base.removeLoader();
+                });
             }
         ]
     );

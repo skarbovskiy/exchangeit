@@ -16,7 +16,7 @@ define([
                         return true;
                     }
 
-                    return /^[0-9]{10,13}$/.test(modelValue);
+                    return /^[0-9]{9,13}$/.test(modelValue);
                 };
             }
         };
