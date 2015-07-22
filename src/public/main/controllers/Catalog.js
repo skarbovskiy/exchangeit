@@ -6,8 +6,8 @@ define([
     main.controller(
         'Catalog',
         [
-            '$scope', '$route', '$location', '$timeout', '$mdSidenav', 'Categories', 'categories',
-            function ($scope, $route, $location, $timeout, $mdSidenav, Categories, categories) {
+            '$scope', '$route', '$location', '$timeout', '$mdSidenav', '$mdToast', 'Categories', 'categories',
+            function ($scope, $route, $location, $timeout, $mdSidenav, $mdToast, Categories, categories) {
                 $scope.Catalog = {
                     categories: buildCategoriesTree(categories),
                     selectedCategories: {},
@@ -85,8 +85,11 @@ define([
                                 $scope.Catalog.categories = buildCategoriesTree(response);
                                 $scope.Base.removeLoader();
                             }).catch(function (e) {
-                                $route.reload();
                                 $scope.Base.removeLoader();
+                                $route.reload();
+                                var toast = $mdToast.simple()
+                                    .content('Ошибка при получении списка категорий');
+                                $mdToast.show(toast);
                             });
                         });
                     }

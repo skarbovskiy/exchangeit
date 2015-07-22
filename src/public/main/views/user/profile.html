@@ -1,0 +1,16 @@
+<md-tabs md-swipe-content="true" md-stretch-tabs="always">
+    <md-tab label="Мои лоты" md-on-select="Profile.loadItems()" ng-disabled="Profile.loadingItems">
+        <div layout="row" layout-align="space-around" ng-if="Profile.loadingItems"  style="height:500px">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+        <div ng-if="!Profile.loadingItems">{{Profile.items}}</div>
+    </md-tab>
+    <md-tab label="Мои сделки" ng-disabled="true"></md-tab>
+    <md-tab label="Информация" md-on-select="Profile.loadItems()" ng-disabled="Profile.loadingItems">
+        <div layout="row" layout-align="space-around" ng-if="Profile.loadingItems"  style="height:500px">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+        <div ng-if="!Profile.loadingItems">{{Profile.items}}</div>
+    </md-tab>
+    <md-tab label="Выйти" md-on-select="Profile.logout()" ng-disabled="Profile.loadingItems"></md-tab>
+</md-tabs>

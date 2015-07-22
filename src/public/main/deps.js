@@ -11,6 +11,8 @@ define([
     './controllers/Catalog',
 
     './controllers/user/Login',
+    './controllers/user/Profile',
 
-    './services/Categories'
+    './services/Categories',
+    './services/Profile'
 ], function () {});

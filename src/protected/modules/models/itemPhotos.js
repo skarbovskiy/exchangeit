@@ -34,5 +34,4 @@ var ItemPhoto = orm.define('ItemPhoto', {
     tableName: 'item_photo',
     schema: 'catalog'
 });
-ItemPhoto.belongsTo(Item, {foreignKey : 'itemId'});
 module.exports = ItemPhoto;

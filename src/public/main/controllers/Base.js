@@ -18,10 +18,14 @@ define([
                 $scope.Base = {
                     currentUser: null,
                     loading: false,
+                    loadingUser: false,
                     loadingProcess: 0,
                     loadingSubProcess: 0,
                     loadingHandler: null,
                     setLoader: function () {
+                        if ($scope.Base.loading) {
+                            return;
+                        }
                         $scope.Base.loadingProcess = 0;
                         $scope.Base.loadingSubProcess = 0;
                         $scope.Base.loading = true;
@@ -47,12 +51,17 @@ define([
                             parent: angular.element(document.body),
                             targetEvent: event
                         })
-                            .then(User.getCurrentUser)
+                            .then(function () {
+                                $scope.Base.loadingUser = true;
+                                return User.getCurrentUser();
+                            })
                             .then(function (response) {
                                 $scope.Base.currentUser = response;
+                                $scope.Base.loadingUser = false;
                                 $route.reload();
                             })
                             .catch(function () {
+                                $scope.Base.loadingUser = false;
                                 var toast = $mdToast.simple()
                                     .content('Пользователь не найден');
                                 $mdToast.show(toast);
@@ -60,11 +69,26 @@ define([
                     }
                 };
 
-                $scope.Base.setLoader();
+                $rootScope.$on('$routeChangeStart', function () {
+                    $scope.Base.setLoader();
+                });
+
+                $rootScope.$on('$routeChangeSuccess', function () {
+                    $scope.Base.removeLoader();
+                    $timeout(function () {
+                        angular.element('html, body').animate({scrollTop: 0}, 200);
+                    });
+                });
+
+                $rootScope.$on('$routeChangeError', function (event, current, previous, rejection) {
+                    console.log(rejection);
+                });
+
+                $scope.Base.loadingUser = true;
                 User.getCurrentUser().then(function (response) {
                     $scope.Base.currentUser = response;
                 }).finally(function () {
-                    $scope.Base.removeLoader();
+                    $scope.Base.loadingUser = false;
                 });
             }
         ]

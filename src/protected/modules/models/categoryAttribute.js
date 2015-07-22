@@ -2,6 +2,7 @@
 var orm = require('../../modules/core/bootstrap').get('orm');
 var Sequelize = require('sequelize');
 var Vocabulary = require('./vocabulary');
+var ItemAttribute = require('./itemAttribute');
 var Category = require('./category');
 var CategoryAttribute = orm.define('CategoryAttribute', {
     id: {
@@ -51,5 +52,7 @@ var CategoryAttribute = orm.define('CategoryAttribute', {
     tableName: 'category_attribute',
     schema: 'catalog'
 });
-CategoryAttribute.belongsTo(Vocabulary, {foreignKey : 'vocabularyId'});
+CategoryAttribute.belongsTo(Vocabulary, {foreignKey: 'vocabularyId'});
+CategoryAttribute.hasMany(ItemAttribute, {foreignKey: 'attributeId'});
+ItemAttribute.belongsTo(CategoryAttribute, {foreignKey: 'attributeId'});
 module.exports = CategoryAttribute;

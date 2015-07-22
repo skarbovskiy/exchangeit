@@ -12,7 +12,10 @@ function handleResponse (request, responseCallback, responseArray) {
     if (responseArray[2]) {
         responseCallback.redirect(responseArray[1]);
     } else {
+        //setTimeout(function () {
+
         responseCallback.status(responseArray[0]).json(responseArray[1]);
+        //}, 3000);
     }
     var startTime = request._startTime;
     var endTime = Date.now();

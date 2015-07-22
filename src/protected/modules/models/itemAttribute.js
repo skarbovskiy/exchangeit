@@ -1,8 +1,6 @@
 'use strict';
 var orm = require('../../modules/core/bootstrap').get('orm');
 var Sequelize = require('sequelize');
-var Item = require('./item');
-var CategoryAttribute = require('./categoryAttribute');
 var ItemAttribute = orm.define('ItemAttribute', {
     id: {
         type: Sequelize.INTEGER,
@@ -41,6 +39,4 @@ var ItemAttribute = orm.define('ItemAttribute', {
     tableName: 'item_attribute',
     schema: 'catalog'
 });
-ItemAttribute.belongsTo(Item, {foreignKey : 'itemId'});
-ItemAttribute.belongsTo(CategoryAttribute, {foreignKey : 'attributeId'});
 module.exports = ItemAttribute;

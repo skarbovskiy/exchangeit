@@ -1,3 +1,4 @@
+'use strict';
 define([
     'angular'
 ], function (angular) {
@@ -23,6 +24,21 @@ define([
                                 var routeFilters = JSON.parse(filters.topFilters || '{}');
                                 return Session.getToken().then(function () {
                                     return Categories.getList(routeFilters.category, routeFilters.attribute);
+                                });
+                            }
+                        ]
+                    }
+                })
+                .when('/profile', {
+                    controller: 'Profile',
+                    templateUrl: '/main/views/user/profile.html',
+                    reloadOnSearch: false,
+                    resolve: {
+                        items: [
+                            'Session', 'Profile',
+                            function (Session, Profile) {
+                                return Session.getToken().then(function () {
+                                    return Profile.getItems();
                                 });
                             }
                         ]

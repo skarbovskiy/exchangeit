@@ -9,6 +9,11 @@ router.get('/', session.checkToken, function (request, response, next) {
         .then(handler.bind(null, request, response))
         .catch(next);
 });
+router.get('/items', session.checkToken, function (request, response, next) {
+    service.getItems(request)
+        .then(handler.bind(null, request, response))
+        .catch(next);
+});
 
 //router.use('/', require('./attributes'));
 
