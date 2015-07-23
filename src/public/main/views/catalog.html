@@ -67,11 +67,11 @@
         </div>
         <md-divider></md-divider>
         <md-content  layout="row" layout-wrap class="catalog">
-            <div flex="25" flex-sm="100" flex-md="50" flex-lg="33" ng-repeat="item in [1,2,3,4,5,6,7]">
+            <div flex="25" flex-sm="100" flex-md="50" flex-lg="33" ng-repeat="item in Catalog.items">
                 <md-card>
                     <img src="/main/img/item.jpg" class="md-card-image" alt="image caption">
                     <md-card-header>
-                        Колготки, носки, нижнее белье, одежда для сна)
+                        {{item.title}}
                     </md-card-header>
                     <md-card-footer layout="column" flex>
                         <div layout="row" flex>
@@ -80,7 +80,7 @@
                                 <div class="item-details"><span>Состояние:</span> Колготки, носки, нижнее белье, одежда для сна</div>
                             </div>
                             <div layout="column" layout-align="end end">
-                                <span class="md-headline">259</span>
+                                <span class="md-headline">{{item.price}}</span>
                                 <span style="font-size: 10px;">баллов</span>
                             </div>
                         </div>

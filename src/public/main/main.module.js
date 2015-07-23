@@ -4,7 +4,7 @@ define([
 ], function (angular) {
     var main = angular.module('main', ['ngRoute', 'ngMaterial', 'ngMessages', 'seo', 'core'])
         .config(['$locationProvider', function ($locationProvider) {
-            $locationProvider.hashPrefix('!');
+            $locationProvider.html5Mode(true).hashPrefix('!');
         }])
         .config(['$mdThemingProvider', function ($mdThemingProvider) {
             $mdThemingProvider.theme('default')
@@ -24,6 +24,16 @@ define([
                                 var routeFilters = JSON.parse(filters.topFilters || '{}');
                                 return Session.getToken().then(function () {
                                     return Categories.getList(routeFilters.category, routeFilters.attribute);
+                                });
+                            }
+                        ],
+                        items: [
+                            '$location', 'Session', 'Categories',
+                            function ($location, Session, Categories) {
+                                var filters = $location.search();
+                                var routeFilters = JSON.parse(filters.topFilters || '{}');
+                                return Session.getToken().then(function () {
+                                    return Categories.getItems(routeFilters.category, routeFilters.attribute);
                                 });
                             }
                         ]

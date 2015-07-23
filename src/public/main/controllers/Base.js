@@ -60,8 +60,11 @@ define([
                                 $scope.Base.loadingUser = false;
                                 $route.reload();
                             })
-                            .catch(function () {
+                            .catch(function (e) {
                                 $scope.Base.loadingUser = false;
+                                if (!e) {
+                                    return;
+                                }
                                 var toast = $mdToast.simple()
                                     .content('Пользователь не найден');
                                 $mdToast.show(toast);

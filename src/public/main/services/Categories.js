@@ -8,9 +8,18 @@ define([
         'Http',
         function (Http) {
             return {
-                getList: function (filterCategories) {
+                getList: function (filterCategories, filterAttributes) {
                     filterCategories = filterCategories || '';
-                    return Http.get('/categories?categories=' + filterCategories);
+                    return Http.get(
+                        '/categories?categories=' + filterCategories + '&attributes=' + JSON.stringify(filterAttributes)
+                    );
+                },
+                getItems: function (filterCategories, filterAttributes) {
+                    filterCategories = filterCategories || '';
+                    return Http.get(
+                        '/categories/items?categories=' + filterCategories +
+                        '&attributes=' + JSON.stringify(filterAttributes)
+                    );
                 }
             }
         }

@@ -6,10 +6,11 @@ define([
     main.controller(
         'Catalog',
         [
-            '$scope', '$route', '$location', '$timeout', '$mdSidenav', '$mdToast', 'Categories', 'categories',
-            function ($scope, $route, $location, $timeout, $mdSidenav, $mdToast, Categories, categories) {
+            '$scope', '$route', '$location', '$timeout', '$mdSidenav', '$mdToast', 'Categories', 'categories', 'items',
+            function ($scope, $route, $location, $timeout, $mdSidenav, $mdToast, Categories, categories, items) {
                 $scope.Catalog = {
                     categories: buildCategoriesTree(categories),
+                    items: items,
                     selectedCategories: {},
                     topFilters: [
                         {
@@ -83,13 +84,16 @@ define([
                             $scope.Base.setLoader();
                             Categories.getList(filterCategories, filterAttributes).then(function (response) {
                                 $scope.Catalog.categories = buildCategoriesTree(response);
+                                return Categories.getItems(filterCategories, filterAttributes);
+                            }).then(function (response) {//todo make this parallel with categories
                                 $scope.Base.removeLoader();
+                                $scope.Catalog.items = response;
                             }).catch(function (e) {
                                 $scope.Base.removeLoader();
-                                $route.reload();
                                 var toast = $mdToast.simple()
                                     .content('Ошибка при получении списка категорий');
                                 $mdToast.show(toast);
+                                $route.reload();
                             });
                         });
                     }
