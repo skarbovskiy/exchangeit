@@ -1,14 +1,14 @@
 'use strict';
 var router = require('express').Router();
 
-router.use('/core/session', require('./core/session'));
-router.use('/core/user', require('./core/user'));
+router.use('/api/v1/core/session', require('./core/session'));
+router.use('/api/v1/core/user', require('./core/user'));
 
-router.use('/admin/users', require('./admin/users'));
-router.use('/admin/categories', require('./admin/categories'));
-router.use('/admin/vocabularies', require('./admin/vocabularies'));
+router.use('/api/v1/admin/users', require('./admin/users'));
+router.use('/api/v1/admin/categories', require('./admin/categories'));
+router.use('/api/v1/admin/vocabularies', require('./admin/vocabularies'));
 
-router.use('/categories', require('./main/categories'));
-router.use('/profile', require('./main/profile'));
+router.use('/api/v1/categories', require('./main/categories'));
+router.use('/api/v1/profile', require('./main/profile'));
 
 module.exports = router;

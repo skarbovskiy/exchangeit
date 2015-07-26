@@ -14,6 +14,11 @@ router.get('/items', session.checkToken, function (request, response, next) {
         .then(handler.bind(null, request, response))
         .catch(next);
 });
+router.get('/:id', session.checkToken, function (request, response, next) {
+    service.getOne(request)
+        .then(handler.bind(null, request, response))
+        .catch(next);
+});
 
 //router.use('/', require('./attributes'));
 

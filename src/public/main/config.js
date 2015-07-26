@@ -2,6 +2,7 @@ require.config({
     deps: ['bootstrap'],
     paths: {
         'jquery': '../lib/jquery/jquery.min',
+        'moment': '../lib/moment/moment.min',
         'angular': '../lib/angular/angular',
         'angularAria': '../lib/angular-aria/angular-aria.min',
         'angularAnimate': '../lib/angular-animate/angular-animate.min',

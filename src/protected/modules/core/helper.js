@@ -14,6 +14,7 @@ var Service = {
             return userData;
         }
         userData.password = undefined;
+        userData.salt = undefined;
         userData.id = undefined;
         userData.user_id = undefined;
         return userData;

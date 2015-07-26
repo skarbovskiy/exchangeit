@@ -28,6 +28,7 @@
     "jquery": "*",
     "lodash": "*",
     "material-design-icons": "*",
+    "moment": "^2.10.5",
     "morgan": "*",
     "node-uuid": "*",
     "pg": "*",

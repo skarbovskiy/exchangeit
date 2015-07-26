@@ -1,6 +1,7 @@
 requirejs([
     'angular',
     'jquery',
+    'moment',
     'angularRoute',
     'angularAnimate',
     'angularAria',
@@ -10,10 +11,11 @@ requirejs([
     'lodash',
     'main.module',
     'deps'
-], function (angular) {
+], function (angular, jquery, moment) {
     'use strict';
 
     $(function () {
+        window.moment = moment;
         angular.bootstrap(document, ['main']);
     });
 });

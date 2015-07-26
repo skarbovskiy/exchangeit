@@ -1,0 +1,72 @@
+<md-content layout-padding>
+    <h3 class="md-headline">Добавление лота</h3>
+    <form name="itemForm">
+        <div layout="row">
+            <div flex style="padding:20px">
+
+                <md-autocomplete
+                        required
+                        md-floating-label="Категория"
+                        md-min-length="0"
+                        md-selected-item="ProfileItem.autocompleteCategory"
+                        md-search-text-change="null"
+                        md-selected-item-change="ProfileItem.changeCategory()"
+                        md-search-text="searchText"
+                        md-items="item in ProfileItem.categories | filter: {canHaveProducts: true} | filter: {name: searchText}"
+                        md-item-text="item.name">
+                    <md-item-template>
+                        <span md-highlight-text="searchText">{{item.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        Категория не найдена
+                    </md-not-found>
+                    <div ng-messages="itemForm.autocomplete.$dirty && itemForm.autocomplete.$touched && itemForm.autocomplete.$error"></div>
+                </md-autocomplete>
+                <md-input-container>
+                    <label>Название</label>
+                    <input ng-model="ProfileItem.name" type="text" name="name" required>
+                    <div ng-messages="itemForm.name.$dirty && itemForm.name.$touched && itemForm.name.$error"></div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Описание</label>
+                    <textarea ng-model="ProfileItem.description" name="description" required></textarea>
+                    <div ng-messages="itemForm.description.$dirty && itemForm.description.$touched && itemForm.description.$error"></div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Цена</label>
+                    <input ng-model="ProfileItem.price" type="text" name="price" required>
+                    <div ng-messages="itemForm.price.$dirty && itemForm.price.$touched && itemForm.price.$error"></div>
+                </md-input-container>
+
+            </div>
+            <div flex style="padding:20px">
+                <div layout="row" layout-align="space-around" ng-if="ProfileItem.loadingAttributes"  style="height:500px">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                <div ng-switch on="attribute.type" ng-repeat="attribute in ProfileItem.itemCategory.CategoryAttributes">
+                    <div ng-switch-when="checkbox">
+                        <md-checkbox ng-model="item.value">
+                            {{attribute.name}}
+                        </md-checkbox>
+                    </div>
+                    <md-select ng-model="item.value" placeholder="{{attribute.name}}" required ng-switch-when="select">
+                        <md-option ng-value="vocabularyItem.value" ng-repeat="vocabularyItem in attribute.Vocabulary.VocabularyContents">{{vocabularyItem.value}}</md-option>
+                    </md-select>
+                    <md-input-container ng-switch-when="text">
+                        <label>{{attribute.name}}</label>
+                        <textarea ng-model="item.value" type="text" name="attribute_{{attribute.id}}" required></textarea>
+                    </md-input-container>
+                    <md-input-container ng-switch-when="date">
+                        <label>{{attribute.name}} (дд.мм.гггг)</label>
+                        <input ng-model="item.value" type="date" name="attribute_{{attribute.id}}" required>
+                    </md-input-container>
+                    <md-input-container ng-switch-default>
+                        <label>{{attribute.name}}</label>
+                        <input ng-model="item.value" type="text" name="attribute_{{attribute.id}}" required>
+                    </md-input-container>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</md-content>

@@ -9,16 +9,13 @@
                 <label>Телефон (без +38)</label>
                 <input ng-model="Login.phone" type="text" name="phone" id="phone-input" phone required/>
                 <div ng-messages="loginForm.phone.$dirty && loginForm.phone.$touched &&loginForm.phone.$error">
-                    <div ng-message="required">Поле обязательно к заполнению</div>
                     <div ng-message="phone">Неверный формат телефона</div>
                 </div>
             </md-input-container>
             <md-input-container>
                 <label>Пароль</label>
                 <input ng-model="Login.password" type="password" name="password" required>
-                <div ng-messages="loginForm.password.$dirty && loginForm.password.$touched &&loginForm.password.$error">
-                    <div ng-message="required">Поле обязательно к заполнению</div>
-                </div>
+                <div ng-messages="loginForm.password.$dirty && loginForm.password.$touched &&loginForm.password.$error"></div>
             </md-input-container>
         </div>
     </md-dialog-content>

@@ -18,14 +18,14 @@
     <md-toolbar class="md-medium-tall" layout="column" layout-align="center center">
         <div class="md-toolbar-tools">
             <!--<a href="/"><img src="/main/img/logo.png"/></a>-->
-            <a href="#!/">Обмен детской одежды и игрушек</a>
+            <a href="/">Обмен детской одежды и игрушек</a>
 
             <!--<a href="/"><img src="/main/img/logo.png"/></a><a href="/"><img src="/main/img/logo.png"/></a><a href="/"><img src="/main/img/logo.png"/></a>-->
 
             <span flex></span>
             <!--<md-button>Зарегистрироваться</md-button>-->
             <md-button ng-if="!Base.currentUser && !Base.loadingUser" ng-click="Base.login()">Войти</md-button>
-            <md-button ng-if="Base.currentUser && !Base.loadingUser" href="#!/profile">Профиль ({{Base.currentUser.firstName}} {{Base.currentUser.lastName}})</md-button>
+            <md-button ng-if="Base.currentUser && !Base.loadingUser" href="/profile">Профиль ({{Base.currentUser.firstName}} {{Base.currentUser.lastName}})</md-button>
             <md-progress-circular md-mode="indeterminate" ng-if="Base.loadingUser" class="md-hue-1"></md-progress-circular>
             <md-button class="md-raised" ng-click="Base.setLoader()">
                 <md-icon ng-style="{color: '#000'}" md-svg-src="/lib/material-design-icons/action/svg/production/ic_shopping_cart_24px.svg"></md-icon>

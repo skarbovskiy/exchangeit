@@ -14,6 +14,9 @@ define([
                         '/categories?categories=' + filterCategories + '&attributes=' + JSON.stringify(filterAttributes)
                     );
                 },
+                getOne: function (id) {
+                    return Http.get('/categories/' + id);
+                },
                 getItems: function (filterCategories, filterAttributes) {
                     filterCategories = filterCategories || '';
                     return Http.get(

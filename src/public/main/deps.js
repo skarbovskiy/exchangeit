@@ -8,10 +8,12 @@ define([
 
 
     './controllers/Base',
+    './controllers/Error',
     './controllers/Catalog',
 
     './controllers/user/Login',
     './controllers/user/Profile',
+    './controllers/user/ProfileItem',
 
     './services/Categories',
     './services/Profile'

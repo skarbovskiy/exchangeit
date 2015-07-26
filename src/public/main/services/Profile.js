@@ -10,6 +10,9 @@ define([
             return {
                 getItems: function () {
                     return Http.get('/profile/items');
+                },
+                getItem: function (id) {
+                    return Http.get('/profile/item/' + id);
                 }
             }
         }

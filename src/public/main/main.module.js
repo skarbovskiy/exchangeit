@@ -23,7 +23,7 @@ define([
                                 var filters = $location.search();
                                 var routeFilters = JSON.parse(filters.topFilters || '{}');
                                 return Session.getToken().then(function () {
-                                    return Categories.getList(routeFilters.category, routeFilters.attribute);
+                                    return Categories.getList(routeFilters.category, routeFilters.attribute || {});
                                 });
                             }
                         ],
@@ -33,7 +33,7 @@ define([
                                 var filters = $location.search();
                                 var routeFilters = JSON.parse(filters.topFilters || '{}');
                                 return Session.getToken().then(function () {
-                                    return Categories.getItems(routeFilters.category, routeFilters.attribute);
+                                    return Categories.getItems(routeFilters.category, routeFilters.attribute || {});
                                 });
                             }
                         ]
@@ -42,7 +42,6 @@ define([
                 .when('/profile', {
                     controller: 'Profile',
                     templateUrl: '/main/views/user/profile.html',
-                    reloadOnSearch: false,
                     resolve: {
                         items: [
                             'Session', 'Profile',
@@ -54,6 +53,40 @@ define([
                         ]
                     }
                 })
+                .when('/profile/items/:id', {
+                    controller: 'ProfileItem',
+                    templateUrl: '/main/views/user/item.html',
+                    resolve: {
+                        categories: [
+                            'Session', 'Categories',
+                            function (Session, Categories) {
+                                return Session.getToken().then(function () {
+                                    return Categories.getList();
+                                });
+                            }
+                        ],
+                        item: [
+                            '$route', 'Session', 'Profile',
+                            function ($route, Session, Profile) {
+                                var id = $route.current.params.id;
+                                if (!id || id === 'null') {
+                                    return {};
+                                }
+                                return Session.getToken().then(function () {
+                                    return Profile.getItem(id);
+                                });
+                            }
+                        ]
+                    }
+                })
+                .when('/404', {
+                    controller: 'Error',
+                    templateUrl: '/main/views/errors/404.html',
+                    resolve: {}
+                })
+                .otherwise({
+                    redirectTo: '/404'
+                });
         }]);
 
     return main;

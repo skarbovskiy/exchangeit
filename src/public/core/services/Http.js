@@ -17,7 +17,7 @@ define([
             }
 
             var HTTP = {
-                baseURL: '/',
+                baseURL: '/api/v1',
                 useSubDomains: false,
                 possibleString: 'abcdefghijklmnopqrstuvwxyz',
                 sessionLength: 15 * 60 * 1000,
@@ -52,7 +52,7 @@ define([
                     data = data || {};
                     var request = {
                         method: type,
-                        url: url,
+                        url: getServiceUrl() + url,
                         headers: {
                             'auth-token': token
                         },
