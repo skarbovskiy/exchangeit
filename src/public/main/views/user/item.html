@@ -1,15 +1,14 @@
-<md-content layout-padding>
+<md-content layout-padding class="profile-item">
     <h3 class="md-headline">Добавление лота</h3>
-    <form name="itemForm">
+    <form name="itemForm" ng-submit="itemForm.$valid && ProfileItem.submitItem()">
         <div layout="row">
-            <div flex style="padding:20px">
-
+            <div flex class="row">
                 <md-autocomplete
                         required
                         md-floating-label="Категория"
                         md-min-length="0"
                         md-selected-item="ProfileItem.autocompleteCategory"
-                        md-search-text-change="null"
+                        md-search-text-change="ProfileItem.clearCategory()"
                         md-selected-item-change="ProfileItem.changeCategory()"
                         md-search-text="searchText"
                         md-items="item in ProfileItem.categories | filter: {canHaveProducts: true} | filter: {name: searchText}"
@@ -24,49 +23,54 @@
                 </md-autocomplete>
                 <md-input-container>
                     <label>Название</label>
-                    <input ng-model="ProfileItem.name" type="text" name="name" required>
-                    <div ng-messages="itemForm.name.$dirty && itemForm.name.$touched && itemForm.name.$error"></div>
+                    <input ng-model="ProfileItem.item.title" type="text" name="title" required>
+                    <div ng-messages="itemForm.title.$dirty && itemForm.title.$touched && itemForm.title.$error"></div>
                 </md-input-container>
                 <md-input-container>
                     <label>Описание</label>
-                    <textarea ng-model="ProfileItem.description" name="description" required></textarea>
+                    <textarea ng-model="ProfileItem.item.description" name="description" required></textarea>
                     <div ng-messages="itemForm.description.$dirty && itemForm.description.$touched && itemForm.description.$error"></div>
                 </md-input-container>
                 <md-input-container>
                     <label>Цена</label>
-                    <input ng-model="ProfileItem.price" type="text" name="price" required>
+                    <input ng-model="ProfileItem.item.price" type="text" name="price" required>
                     <div ng-messages="itemForm.price.$dirty && itemForm.price.$touched && itemForm.price.$error"></div>
                 </md-input-container>
 
             </div>
-            <div flex style="padding:20px">
+            <div flex class="row">
                 <div layout="row" layout-align="space-around" ng-if="ProfileItem.loadingAttributes"  style="height:500px">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
                 <div ng-switch on="attribute.type" ng-repeat="attribute in ProfileItem.itemCategory.CategoryAttributes">
                     <div ng-switch-when="checkbox">
-                        <md-checkbox ng-model="item.value">
+                        <md-checkbox ng-model="attribute.value" ng-true-value="true" ng-false-value="false">
                             {{attribute.name}}
                         </md-checkbox>
                     </div>
-                    <md-select ng-model="item.value" placeholder="{{attribute.name}}" required ng-switch-when="select">
+                    <md-select ng-model="attribute.value" placeholder="{{attribute.name}}" required ng-switch-when="select">
                         <md-option ng-value="vocabularyItem.value" ng-repeat="vocabularyItem in attribute.Vocabulary.VocabularyContents">{{vocabularyItem.value}}</md-option>
                     </md-select>
                     <md-input-container ng-switch-when="text">
                         <label>{{attribute.name}}</label>
-                        <textarea ng-model="item.value" type="text" name="attribute_{{attribute.id}}" required></textarea>
+                        <textarea ng-model="attribute.value" type="text" name="attribute_{{attribute.id}}" required></textarea>
                     </md-input-container>
                     <md-input-container ng-switch-when="date">
                         <label>{{attribute.name}} (дд.мм.гггг)</label>
-                        <input ng-model="item.value" type="date" name="attribute_{{attribute.id}}" required>
+                        <input ng-model="attribute.value" type="text" name="attribute_{{attribute.id}}" required>
                     </md-input-container>
                     <md-input-container ng-switch-default>
                         <label>{{attribute.name}}</label>
-                        <input ng-model="item.value" type="text" name="attribute_{{attribute.id}}" required>
+                        <input ng-model="attribute.value" type="text" name="attribute_{{attribute.id}}" required>
                     </md-input-container>
                 </div>
-
             </div>
+            <div flex>photos</div>
+        </div>
+        <div layout="row">
+            <md-button class="md-primary" flex>
+                Сохранить
+            </md-button>
         </div>
     </form>
 </md-content>

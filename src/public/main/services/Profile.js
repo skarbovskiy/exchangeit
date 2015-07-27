@@ -12,7 +12,10 @@ define([
                     return Http.get('/profile/items');
                 },
                 getItem: function (id) {
-                    return Http.get('/profile/item/' + id);
+                    return Http.get('/profile/items/' + id);
+                },
+                addItem: function (info, attributes) {
+                    return Http.post('/profile/items/', {info: info, attributes: attributes});
                 }
             }
         }

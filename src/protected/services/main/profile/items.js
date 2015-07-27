@@ -64,6 +64,8 @@ var Service = {
         return Item.create(info)
             .then(function (item) {
                 attributes.forEach(function (attribute) {
+                    attribute.attributeId = attribute.id;
+                    delete attribute.id;
                     attribute.itemId = item.id;
                 });
                 return ItemAttributes.bulkCreate(attributes).then(function () {
@@ -72,7 +74,7 @@ var Service = {
             })
             .then(function (item) {
                 return [201, {id: item.id}];
-            })
+            });
     }
 };
 

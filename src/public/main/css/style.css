@@ -91,3 +91,10 @@ md-backdrop {
     z-index: 190;
     position: fixed;
 }
+.profile-item .row {
+    padding: 20px;
+}
+
+.profile-item .row md-select {
+    display: block;
+}

@@ -10,6 +10,9 @@ define([
             autocompleteCategory: null,
             itemCategory: null,
             loadingAttributes: false,
+            clearCategory: function () {
+                $scope.ProfileItem.itemCategory = null;
+            },
             changeCategory: function () {
                 $scope.ProfileItem.loadingAttributes = true;
                 Categories.getOne($scope.ProfileItem.autocompleteCategory.id)
@@ -22,6 +25,26 @@ define([
                             .content('Ошибка при получении атрибутов категории');
                         $mdToast.show(toast);
                         $scope.ProfileItem.loadingAttributes = false;
+                    });
+            },
+            submitItem: function () {
+                $scope.Base.setLoader();
+                $scope.ProfileItem.item.categoryId = $scope.ProfileItem.itemCategory.id;
+
+                var attributes = _.cloneDeep($scope.ProfileItem.itemCategory.CategoryAttributes);
+                attributes.forEach(function (attribute) {
+                    attribute.Vocabulary = undefined;
+                });
+                Profile.addItem($scope.ProfileItem.item, attributes)
+                    .then(function () {
+                        $scope.Base.removeLoader();
+                        $location.path('/profile');
+                    })
+                    .catch(function () {
+                        $scope.Base.removeLoader();
+                        var toast = $mdToast.simple()
+                            .content('Ошибка при сохранении лота');
+                        $mdToast.show(toast);
                     });
             }
         };
